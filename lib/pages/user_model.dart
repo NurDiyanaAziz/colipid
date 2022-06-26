@@ -12,7 +12,7 @@ class UserModel {
   String? usertype;
   final String ic;
   bool? med;
-  String? dosage;
+
   String? medname;
   String? ratiostat;
 
@@ -36,7 +36,6 @@ class UserModel {
     required this.ic,
     this.usertype = '',
     this.med = false,
-    this.dosage = '',
     this.medname = '',
     this.ratiostat = '',
   });
@@ -100,7 +99,6 @@ class UserModel {
       'ic': ic,
       'usertype': usertype,
       'med': med,
-      'dosage': dosage,
       'medname': medname,
       'ratio': ratio,
       'ratioStat': ratiostat,

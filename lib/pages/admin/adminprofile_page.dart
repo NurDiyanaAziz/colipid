@@ -2,6 +2,7 @@ import 'package:colipid/pages/login_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminProfile extends StatefulWidget {
   const AdminProfile({Key? key}) : super(key: key);
@@ -13,6 +14,22 @@ class AdminProfile extends StatefulWidget {
 class _AdminProfileState extends State<AdminProfile> {
   int index = 1;
 
+  late SharedPreferences logindata;
+  late String username;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('ic')!;
+    });
+  }
+
   Widget buttonLogout() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
@@ -20,6 +37,7 @@ class _AdminProfileState extends State<AdminProfile> {
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
+          logindata.setBool('login', true);
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => LoginPageScreen()));
         },

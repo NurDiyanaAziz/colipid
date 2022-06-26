@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colipid/pages/admin/adminmain.dart';
 import 'package:colipid/pages/admin/dialogs.dart';
+import 'package:colipid/pages/user/user_updateprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHealthMenuScreen extends StatefulWidget {
   const UserHealthMenuScreen({Key? key}) : super(key: key);
@@ -12,29 +15,29 @@ class UserHealthMenuScreen extends StatefulWidget {
 }
 
 class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
+  late String name;
+  late String weight;
+  late String height;
+  late String bmi;
+  late String bmistat;
+
+  late SharedPreferences logindata;
+  late String ic;
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    //fetchUserData();
+
+    initial();
   }
 
-  //final routeData = ModalRoute.of(context).settings.arguments as Map<String, Object>;
-  //final thirdKey  =routeData['']
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
 
-  /* late String icc = "";
-  void fetchUserData() {
-    // do something
-    String ic = widget.myObject.toString();
     setState(() {
-      icc = ic;
+      ic = logindata.getString('ic').toString();
     });
   }
-
-  Future<String> fetchUser() async {
-    // do something
-    final ic = widget.myObject.toString();
-    return ic;
-  }*/
 
   Widget buildBackBtn() {
     return Container(
@@ -120,8 +123,8 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
         elevation: 5,
         onPressed: () async {
           // String ic = widget.myObject.toString();
-          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //  builder: (context) => AdminAddPatientInfo(myObject: ic)));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => UserUpdateInfo()));
         },
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

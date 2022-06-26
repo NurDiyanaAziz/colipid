@@ -5,6 +5,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/standalone.dart' as tz;
 
 import 'adminpatientmenu_page.dart';
 
@@ -12,6 +15,7 @@ class AdminUpdateLipidProfile extends StatefulWidget {
   //const AdminUpdateLipidProfile({Key? key}) : super(key: key);
   var myObject;
   AdminUpdateLipidProfile({this.myObject});
+
   @override
   _AdminUpdateLipidProfileState createState() =>
       _AdminUpdateLipidProfileState();
@@ -30,11 +34,22 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
   final trigly = TextEditingController();
   final comment = TextEditingController();
 
+  late SharedPreferences logindata;
+  late String icuser;
   @override
   void initState() {
     super.initState();
+    icuser = 'test';
+    initial();
     fetchUser();
     fetchUserLipidData();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      icuser = logindata.getString('ic').toString();
+    });
   }
 
   void fetchUserLipidData() async {
@@ -53,7 +68,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
 
     setState(() {
       var now = DateTime.now();
-      var formatterDate = DateFormat('dd/MM/yy');
+      var formatterDate = DateFormat('dd/MM/yyyy');
       var formatterTime = DateFormat('HH:mm');
       String actualDate = formatterDate.format(now);
       String actualTime = formatterTime.format(now);
@@ -62,6 +77,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
       times.text = actualTime;
       pname.text = snaps.docs[0]['fullname'].toString();
       pic.text = snap.docs[0]['ic'].toString();
+      drname.text = icuser;
 
       ;
     });
@@ -78,7 +94,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
 
   Widget buildBackBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
       child: RaisedButton(
@@ -92,7 +108,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
                 builder: (context) => AdminUpdatePatient(myObject: icc)));
           }
         },
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: Colors.white,
         child: Text(
@@ -117,7 +133,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -127,8 +143,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: pname,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon:
@@ -153,7 +169,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -163,8 +179,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: pic,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon:
@@ -189,7 +205,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -199,8 +215,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: dates,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon:
@@ -225,7 +241,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -235,8 +251,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: times,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon: Icon(Icons.punch_clock, color: Color(0x663e97a9)),
@@ -260,7 +276,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -270,8 +286,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: drname,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon: Icon(Icons.people, color: Color(0x663e97a9)),
@@ -295,7 +311,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -305,16 +321,17 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: hdl,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.bloodtype, color: Color(0x663e97a9)),
+                contentPadding: const EdgeInsets.only(top: 14),
+                prefixIcon:
+                    const Icon(Icons.bloodtype, color: Color(0x663e97a9)),
                 hintText: 'HDL',
-                hintStyle: TextStyle(color: Colors.black38),
+                hintStyle: const TextStyle(color: Colors.black38),
                 suffixIcon: IconButton(
                   onPressed: hdl.clear,
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                 ),
               ),
             ),
@@ -335,7 +352,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -345,16 +362,17 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
             child: TextField(
               controller: tc,
               keyboardType: TextInputType.name,
-              style: TextStyle(color: Colors.black87, fontSize: 20),
+              style: const TextStyle(color: Colors.black87, fontSize: 20),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.bloodtype, color: Color(0x663e97a9)),
+                contentPadding: const EdgeInsets.only(top: 14),
+                prefixIcon:
+                    const Icon(Icons.bloodtype, color: Color(0x663e97a9)),
                 hintText: 'Total Cholesterol',
-                hintStyle: TextStyle(color: Colors.black38),
+                hintStyle: const TextStyle(color: Colors.black38),
                 suffixIcon: IconButton(
                   onPressed: tc.clear,
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                 ),
               ),
             ),

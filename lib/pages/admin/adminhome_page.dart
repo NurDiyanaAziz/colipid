@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
 
 import 'adminaddstaff_page.dart';
@@ -35,13 +36,23 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
     AdminProfile(),
   ];
 
+  late SharedPreferences logindata;
+  late String ic;
+  late String test;
+
   @override
   void initState() {
+    test = "test";
+    initial();
     super.initState();
-    final comparison =
-        'fish+egg+chicken+oat+rice'.similarityTo('chicken+fish+rice');
-    print(comparison);
-    testtext = comparison;
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      ic = logindata.getString('ic').toString();
+      test = ic;
+    });
   }
 
   final formKey = new GlobalKey<FormState>();
@@ -530,10 +541,6 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
-                    buildDataInfo(),
-                    SizedBox(height: 5),
-                    buildLogInfo(),
-                    SizedBox(height: 40),
                     Text(
                       'List of Patient-In-Waiting',
                       style: TextStyle(
@@ -544,7 +551,7 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                     SizedBox(height: 20),
                     buildRegBtn(),
                     SizedBox(
-                      height: 400,
+                      height: 500,
                       child: StreamBuilder<List<PatientListModel>>(
                           stream: readUsers(),
                           builder: (context, snapshot) {

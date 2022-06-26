@@ -33,7 +33,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
     final items = <Widget>[
       Icon(Icons.file_copy, size: 30),
       Icon(Icons.home, size: 30),
-      Icon(Icons.person, size: 30),
+      Icon(Icons.settings, size: 30),
     ];
 
     return Scaffold(

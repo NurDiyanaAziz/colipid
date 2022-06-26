@@ -1,6 +1,8 @@
+import 'package:colipid/pages/admin/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login_page.dart';
 
@@ -14,6 +16,22 @@ class UserSetting extends StatefulWidget {
 class _UserSettingState extends State<UserSetting> {
   int index = 1;
 
+  late SharedPreferences logindata;
+  late String username;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('ic').toString();
+    });
+  }
+
   Widget buttonLogout() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
@@ -21,8 +39,13 @@ class _UserSettingState extends State<UserSetting> {
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginPageScreen()));
+          final action = await Dialogs.yesAbortDialog(
+              context, 'Confirm Logout?', 'Are you sure?');
+          if (action == DialogAction.yes) {
+            logindata.setBool('login', true);
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => LoginPageScreen()));
+          }
         },
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -72,7 +95,7 @@ class _UserSettingState extends State<UserSetting> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Profile & Settings',
+                      'Logout',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,

@@ -198,7 +198,7 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: Colors.white,
         child: Text(
-          'Submit',
+          'Finish',
           style: TextStyle(
               color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold),
         ),

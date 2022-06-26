@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colipid/pages/admin/dialogs.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +17,8 @@ class AdminPatientMedicine extends StatefulWidget {
 
 class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
   int index = 1;
+  bool isSwitched = false;
+  String dropdownValue = 'Choose Med';
   @override
   void initState() {
     super.initState();
@@ -49,6 +54,148 @@ class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
               color: Colors.blue[400],
               fontSize: 18,
               fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget buildText() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        alignment: Alignment.topLeft,
+        child: Text(
+          'Does patient required statin?',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ));
+  }
+
+  Widget buildSwitchBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      alignment: Alignment.topLeft,
+      child: CupertinoSwitch(
+        value: isSwitched,
+        onChanged: (value) {
+          setState(() {
+            isSwitched = value;
+
+            print(isSwitched);
+          });
+        },
+        activeColor: Colors.green,
+      ),
+    );
+  }
+
+  Widget buildMedType() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Type of Medicine',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10),
+        Container(
+            padding: const EdgeInsets.all(15.0),
+            width: 360,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 2))
+                ]),
+            height: 70,
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 92, 57, 4), fontSize: 18),
+              underline: Container(
+                height: 2,
+                color: Color.fromARGB(255, 128, 101, 14),
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items: <String>[
+                'Choose Med',
+                '-High-Intensity Statin Therapy-',
+                'Atorvastatin 40-80 mg',
+                'Rosuvastatin 20-40 mg',
+                '-Moderate-Intensity Statin Therapy-',
+                'Atorvastatin 10-20 mg',
+                'Rosuvastatin 5-10 mg',
+                'Simvastatin 20-40 mg',
+                'Pravastatin 40-80 mg',
+                'Lovastatin 40 mg',
+                'Fluvastatin 40 mg bid',
+                'Pitavastatin 2-4 mg',
+                '-Low-Intensity Statin Therapy-',
+                'Simvastatin 10 mg',
+                'Pravastatin 10-20 mg',
+                'Lovastatin 20 mg',
+                'Fluvastatin 20-40 mg',
+                'Pitavastatin 1 mg',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ))
+      ],
+    );
+  }
+
+  Widget buildSubmitBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 15),
+      width: 100,
+      child: RaisedButton(
+        elevation: 5,
+        onPressed: () async {
+          final action = await Dialogs.yesAbortDialog(
+              context, 'Confirm Submit?', 'Are you sure?');
+          if (action == DialogAction.yes) {
+            String ics = widget.myObject.toString();
+            QuerySnapshot snap = await FirebaseFirestore.instance
+                .collection("users")
+                .where("ic", isEqualTo: ics)
+                .get();
+
+            String id = snap.docs[0]['id'].toString();
+            String med = dropdownValue.toString();
+            String requiremed = isSwitched.toString();
+
+            final docUser =
+                FirebaseFirestore.instance.collection('users').doc(id);
+
+            docUser.update({
+              'med': requiremed,
+              'medname': med,
+            });
+
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => AdminUpdatePatient(myObject: icc)));
+          }
+        },
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        color: Colors.white,
+        child: Text(
+          'Submit',
+          style: TextStyle(
+              color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -98,9 +245,13 @@ class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
                     ),
                     SizedBox(height: 20),
                     buildBackBtn(),
-                    SizedBox(height: 5),
-                    SizedBox(height: 40),
-                    SizedBox(height: 20),
+                    SizedBox(height: 15),
+                    buildText(),
+                    buildSwitchBtn(),
+                    SizedBox(height: 15),
+                    buildMedType(),
+                    SizedBox(height: 15),
+                    buildSubmitBtn(),
                     SizedBox(height: 20),
                   ],
                 ),

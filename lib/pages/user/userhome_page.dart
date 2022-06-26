@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../admin/dialogs.dart';
 import 'choosemeal_page.dart';
@@ -14,6 +16,45 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
   int index = 2;
+  late String name;
+  late String weight;
+  late String height;
+  late String bmi;
+  late String bmistat;
+
+  late SharedPreferences logindata;
+  late String ic;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name = '';
+    weight = '';
+    height = '';
+    bmi = '';
+    bmistat = '';
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection("users")
+        .where("ic", isEqualTo: logindata.getString('ic').toString())
+        .get();
+
+    double bmi1 = double.parse((snap.docs[0]['bmi']).toStringAsFixed(2));
+
+    setState(() {
+      ic = logindata.getString('ic').toString();
+      name = snap.docs[0]['fullname'].toString();
+      weight = snap.docs[0]['weight'].toString();
+      height = snap.docs[0]['height'].toString();
+      bmi = bmi1.toString();
+      bmistat = snap.docs[0]['bmistatus'].toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,71 +166,51 @@ class _UserHomePageState extends State<UserHomePage> {
                 padding: const EdgeInsets.all(14.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextField(
-                      textAlign: TextAlign.left,
+                    const Text(
+                      'Meal',
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20),
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: 'Meal'),
                     ),
+                    SizedBox(height: 20),
                     SizedBox(
-                      width: 300.0,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          String word = '1500kcal';
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChooseMeal(myObject: word)));
-                        },
-                        child: Text(
-                          "1500 Kcal",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      width: 200.0,
+                      height: 100,
+                      child: TextButton.icon(
+                        icon: Image.asset(
+                          "images/chicken.png",
+                          scale: 2,
                         ),
-                        color: Colors.blue[400],
+                        label: const Text(
+                          "Add Activity",
+                          style: TextStyle(color: Colors.black, fontSize: 17),
+                        ),
+                        onPressed: () {
+                          // call method
+                        },
                       ),
                     ),
                     SizedBox(height: 20),
                     SizedBox(
-                      width: 300.0,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          String word = "1800kcal";
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChooseMeal(myObject: word)));
-                        },
-                        child: Text(
-                          "1800 Kcal",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      width: 200.0,
+                      height: 100,
+                      child: TextButton.icon(
+                        icon: const Icon(
+                          Icons.add,
+                          size: 70,
                         ),
-                        color: Colors.blue[400],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      width: 300.0,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          final word = '2000kcal';
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChooseMeal(myObject: word)));
-                        },
-                        child: Text(
-                          "2000 Kcal",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        label: const Text(
+                          "View Activity",
+                          style: TextStyle(color: Colors.black, fontSize: 17),
                         ),
-                        color: Colors.blue[400],
+                        onPressed: () {
+                          // call method
+                          //Navigator.of(context).pushReplacement(
+                          //  MaterialPageRoute(
+                          //      builder: (context) =>
+                          //         ChooseMeal()));
+                        },
                       ),
                     ),
                   ],
@@ -219,15 +240,16 @@ class _UserHomePageState extends State<UserHomePage> {
                 ],
               )),
               child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 50),
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       height: 200,
                       width: 400,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(50),
                             topRight: Radius.circular(50),
@@ -243,7 +265,7 @@ class _UserHomePageState extends State<UserHomePage> {
                             child: Container(
                               height: 180,
                               width: 300,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Color.fromARGB(255, 58, 178, 202),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(50),
@@ -253,44 +275,54 @@ class _UserHomePageState extends State<UserHomePage> {
                                   )),
                             )),
                         Positioned(
-                            top: 30,
-                            left: 40,
+                            top: 20,
+                            left: 30,
                             child: Text(
-                              "Profile\n" + "Hello" + "\ntesting",
-                              style: TextStyle(
+                              "Profile\n\n" +
+                                  "Name:         " +
+                                  name +
+                                  "\nWeight:       " +
+                                  weight +
+                                  " kg" +
+                                  "\nHeight:        " +
+                                  height +
+                                  " m" +
+                                  "\nBMI:             " +
+                                  bmi +
+                                  "\nBMI status: " +
+                                  bmistat,
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             )),
                       ]),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Card(
                         elevation: 5,
                         child: ListTile(
-                          title: Text('Meal'),
-                          subtitle: Text('Calories Needed:'),
+                          title: const Text('Meal'),
                           trailing: IconButton(
-                              icon: Icon(Icons.add),
+                              icon: const Icon(Icons.add),
                               onPressed: () {
                                 openDialogMenu();
                               }),
                         )),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Card(
                         elevation: 5,
                         child: ListTile(
-                          title: Text('Exercise'),
-                          subtitle: Text('Total Calories Burnt:'),
+                          title: const Text('Exercise'),
                           trailing: IconButton(
-                              icon: Icon(Icons.add),
+                              icon: const Icon(Icons.add),
                               onPressed: () {
                                 openDialogExercise();
                               }),
                         )),
-                    SizedBox(height: 40),
-                    SizedBox(height: 20),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

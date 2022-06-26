@@ -1,9 +1,9 @@
 class LipidModel {
   String date;
-  String id;
-  String time;
+  String? id;
+  String? time;
   String? comment;
-  final String ic;
+  String? ic;
   double tc, hdl, ldl, trigly; //TotalCholesterol = tc
   String? tcstatus, ldlstatus, hdlstatus, triglystatus;
   String? drname;
@@ -13,7 +13,7 @@ class LipidModel {
     this.date = '',
     this.id = '',
     this.time = '',
-    required this.ic,
+    this.ic = '',
     this.tc = 0,
     this.hdl = 0,
     this.ldl = 0,
@@ -43,4 +43,19 @@ class LipidModel {
       'drname': drname,
     };
   }
+
+  LipidModel.fromMap(Map<String, dynamic> map)
+      : assert(map['date'] != null),
+        assert(map['tc'] != null),
+        assert(map['hdl'] != null),
+        assert(map['ldl'] != null),
+        assert(map['trigly'] != null),
+        date = map['date'],
+        tc = map['tc'],
+        hdl = map['hdl'],
+        ldl = map['ldl'],
+        trigly = map['trigly'];
+
+  @override
+  String toString() => "Record<$date:$tc:$hdl:$ldl:$trigly>";
 }

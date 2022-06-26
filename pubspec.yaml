@@ -50,7 +50,11 @@ dependencies:
   firebase_ml_model_downloader: ^0.1.0+14
   http: ^0.13.4
   string_similarity: ^2.0.0
+  fl_chart: ^0.55.0
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
   charts_flutter: ^0.12.0
+
   
 
 

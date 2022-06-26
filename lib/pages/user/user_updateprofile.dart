@@ -2,36 +2,70 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colipid/pages/patientlist_model.dart';
+import 'package:colipid/pages/user/userhealthmenu.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:age_calculator/age_calculator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'adminpatientmenu_page.dart';
-import 'dialogs.dart';
+import '../admin/dialogs.dart';
 
-class AdminAddPatientInfo extends StatefulWidget {
+class UserUpdateInfo extends StatefulWidget {
   //const AdminAddPatientInfo(String ic, {Key? key}) : super(key: key);
-  var myObject;
-  AdminAddPatientInfo({this.myObject});
+
   @override
-  _AdminAddPatientInfoState createState() => _AdminAddPatientInfoState();
+  _UserUpdateInfoState createState() => _UserUpdateInfoState();
 }
 
 enum SingingCharacter { No, Yes }
 enum SingingCharacters { Male, Female }
 
-class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
+class _UserUpdateInfoState extends State<UserUpdateInfo> {
   int index = 1;
   String _dropdownValue = "";
   List items = [
     'Choose',
   ];
+
+  late String names;
+  late String weights;
+  late String heights;
+  late String bmis;
+  late String bmistats;
+
+  late SharedPreferences logindata;
+  late String ics;
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    fetchUserData();
-    fetchUser();
+    names = '';
+    weights = '';
+    heights = '';
+    bmis = '';
+    bmistats = '';
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection("users")
+        .where("ic", isEqualTo: logindata.getString('ic').toString())
+        .get();
+
+    double bmi1 = double.parse((snap.docs[0]['bmi']).toStringAsFixed(2));
+
+    setState(() {
+      ics = logindata.getString('ic').toString();
+      names = snap.docs[0]['fullname'].toString();
+      weights = snap.docs[0]['weight'].toString();
+      heights = snap.docs[0]['height'].toString();
+      bmis = bmi1.toString();
+      bmistats = snap.docs[0]['bmistatus'].toString();
+    });
   }
 
   SingingCharacters? _characters = SingingCharacters.Male;
@@ -51,50 +85,6 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
   String? bmistat = '';
   String? hipwaistratio = '';
 
-  void fetchUserData() async {
-    // do something
-    String ic = widget.myObject.toString();
-    var year = ic.substring(0, 2);
-    var month = ic.substring(2, 4);
-    var day = ic.substring(4, 6);
-
-    //if(year <= )
-
-    var dobs = day + "/" + month + "/" + "19" + year;
-    var fullyear = "19" + year;
-
-    DateTime birthday =
-        DateTime(int.parse(fullyear), int.parse(month), int.parse(day));
-    DateDuration duration;
-    duration = AgeCalculator.age(birthday);
-    QuerySnapshot snap = await FirebaseFirestore.instance
-        .collection("users")
-        .where("ic", isEqualTo: ic)
-        .get();
-    setState(() {
-      name.text = snap.docs[0]['fullname'].toString();
-      dob.text = dobs.toString();
-      age.text = duration.toString();
-      phone.text = snap.docs[0]['phone'].toString();
-
-      ;
-    });
-  }
-
-  /* String _getDOB() async {
-    String dobss = "";
-    return dobss;
-  }*/
-
-  late String icc = "";
-  void fetchUser() {
-    // do something
-    String ic = widget.myObject.toString();
-    setState(() {
-      icc = ic;
-    });
-  }
-
   Widget buildBack() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +103,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                     context, 'Confirm Discard?', 'Are you sure?');
                 if (action == DialogAction.yes) {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => AdminUpdatePatient(myObject: icc)));
+                      builder: (context) => UserHealthMenuScreen()));
                 }
               },
               padding: EdgeInsets.all(15),
@@ -159,7 +149,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                     ]),
                 height: 60,
                 child: Text(
-                  widget.myObject.toString(),
+                  ics,
                   style: TextStyle(fontSize: 20),
                 )))
       ],
@@ -317,7 +307,6 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
           if (action == DialogAction.yes) {
-            String ics = widget.myObject.toString();
             QuerySnapshot snap = await FirebaseFirestore.instance
                 .collection("users")
                 .where("ic", isEqualTo: ics)
@@ -382,29 +371,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
               'ratiostat': hipwaistratio,
             });
 
-            /*DocumentReference documentReference =
-                FirebaseFirestore.instance.collection('users').document(id);
-            Map<String, dynamic> user = {
-              'active': active,
-              'dob': dob.text,
-              'allergic': aller,
-              'bmi': bmi,
-              'gender': gend,
-              'bmistatus': bmistat,
-              'age': ages,
-              'height': heights,
-              'weight': weights,
-              'waist': waists,
-              'hip': hips,
-              'waisthipratio': hipwaistratio,
-              'totalhwratio': whratio,
-            };*/ // <-- Updated data
-
-            /*documentReference.setData(user).whenComplete(() {
-              print("$id updated");
-            });*/
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => AdminUpdatePatient(myObject: icc)));
+                builder: (context) => UserHealthMenuScreen()));
           }
         },
         padding: EdgeInsets.all(15),

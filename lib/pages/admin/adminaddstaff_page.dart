@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AdminAddStaff extends StatefulWidget {
-  const AdminAddStaff({Key? key}) : super(key: key);
+  //const AdminAddStaff({Key? key}) : super(key: key);
+
+  var myLogin1;
+  AdminAddStaff({this.myLogin1});
 
   @override
   _AdminAddStaffState createState() => _AdminAddStaffState();

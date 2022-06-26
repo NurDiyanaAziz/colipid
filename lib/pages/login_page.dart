@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:flutter_session/flutter_session.dart';
 
 import '../homepage_screen.dart';
@@ -23,6 +24,40 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   bool isRememberMe = false;
   final phone = TextEditingController();
   String dialCodeDigit = "+60";
+  late SharedPreferences logindata;
+  late bool newuser;
+  late String usernow;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    check_if_already_login();
+  }
+
+  void check_if_already_login() async {
+    logindata = await SharedPreferences.getInstance();
+    newuser = (logindata.getBool('login') ?? true);
+    usernow = logindata.getString('type').toString();
+    print(newuser);
+    if (newuser == false) {
+      if (usernow == 'patient') {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => UserMainScreen()));
+      } else if (usernow == 'admin') {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => AdminMainScreen()));
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    phone.dispose();
+
+    super.dispose();
+  }
 
   final formKey = new GlobalKey<FormState>();
   bool validateAndSave() {
@@ -45,6 +80,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
       if (snap.size > 0) {
         final user = snap.docs[0]['usertype'].toString();
+        final ic = snap.docs[0]['ic'].toString();
+        logindata.setBool('login', false);
+        logindata.setString('ic', ic);
+        logindata.setString('type', user);
 
         if (user == 'patient') {
           Navigator.of(context).pushReplacement(
@@ -227,7 +266,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
             )),
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 220),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -240,14 +279,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   ),
                   SizedBox(height: 50),
                   buildPhoneNumber(),
-                  SizedBox(height: 30),
-                  buildRememberMe(),
                   SizedBox(height: 20),
                   buildLoginBtn(),
-                  SizedBox(height: 10),
-                  buildAdminBtn(),
-                  SizedBox(height: 10),
-                  buildUserBtn(),
                 ],
               ),
             ),
