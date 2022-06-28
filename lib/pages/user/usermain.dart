@@ -6,8 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserMainScreen extends StatefulWidget {
-  const UserMainScreen({Key? key}) : super(key: key);
-
+  //const UserMainScreen({Key? key}) : super(key: key);
+  var myObject = 0;
+  UserMainScreen({required this.myObject});
   @override
   _UserMainScreenState createState() => _UserMainScreenState();
 }
@@ -20,10 +21,11 @@ class _UserMainScreenState extends State<UserMainScreen> {
   ];
 
   @override
-  /* void initState() {
-    users = User.getUsers();
+  void initState() {
+    index = 0;
+    index = widget.myObject;
     super.initState();
-  }*/
+  }
 
   @override
   int index = 1;

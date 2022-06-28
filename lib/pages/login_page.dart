@@ -40,10 +40,13 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     newuser = (logindata.getBool('login') ?? true);
     usernow = logindata.getString('type').toString();
     print(newuser);
+    final index = 1;
     if (newuser == false) {
       if (usernow == 'patient') {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => UserMainScreen()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => UserMainScreen(
+                  myObject: index,
+                )));
       } else if (usernow == 'admin') {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => AdminMainScreen()));
@@ -84,10 +87,12 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
         logindata.setBool('login', false);
         logindata.setString('ic', ic);
         logindata.setString('type', user);
-
+        final index = 1;
         if (user == 'patient') {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => UserMainScreen()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => UserMainScreen(
+                    myObject: index,
+                  )));
         } else if (user == 'admin') {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => AdminMainScreen()));
@@ -226,8 +231,11 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => UserMainScreen()));
+          final index = 1;
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => UserMainScreen(
+                    myObject: index,
+                  )));
         },
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

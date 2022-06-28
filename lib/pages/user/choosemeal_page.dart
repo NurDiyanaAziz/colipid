@@ -134,6 +134,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                   ]),
               height: 40,
               child: TextField(
+                //enabled: false,
                 controller: pref,
                 keyboardType: TextInputType.name,
                 style: TextStyle(color: Colors.black87),
@@ -481,7 +482,8 @@ class _ChooseMealState extends State<ChooseMeal> {
   }
 
   Widget buildUsers(MealModel e) => Card(
-      elevation: 5,
+      margin: EdgeInsets.all(44),
+      elevation: 15,
       child: ListTile(
         title: Text(e.plan),
         subtitle: Text(e.tag),
@@ -709,7 +711,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(
-                              height: 400,
+                              height: 900,
                               child: StreamBuilder<List<MealModel>>(
                                   stream: readMeal(),
                                   builder: (context, snapshot) {

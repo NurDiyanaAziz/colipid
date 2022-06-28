@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colipid/pages/admin/adminmain.dart';
 import 'package:colipid/pages/admin/dialogs.dart';
+import 'package:colipid/pages/user/userViewReport.dart';
 import 'package:colipid/pages/user/user_updateprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,16 +69,16 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
   Widget buildViewReportBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
+      width: 300,
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
           //String ic = widget.myObject.toString();
-          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //  builder: (context) => AdminViewReportPatient(myObject: ic)));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => userViewReport()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        padding: EdgeInsets.all(55),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
         color: Colors.white,
         child: Text(
           'View Report',
@@ -101,7 +102,7 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
           //Navigator.of(context).pushReplacement(MaterialPageRoute(
           // builder: (context) => AdminUpdateLipidProfile(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(55),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: Colors.white,
         child: Text(
@@ -117,8 +118,8 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
 
   Widget buildInputPatientInfoBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 85),
+      width: 300,
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
@@ -126,8 +127,8 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => UserUpdateInfo()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        padding: EdgeInsets.all(55),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
         color: Colors.white,
         child: Text(
           'Update Patient Profile',

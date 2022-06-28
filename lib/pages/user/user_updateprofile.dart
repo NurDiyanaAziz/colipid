@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colipid/pages/patientlist_model.dart';
 import 'package:colipid/pages/user/userhealthmenu.dart';
+import 'package:colipid/pages/user/usermain.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +36,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
   late String bmistats;
 
   late SharedPreferences logindata;
-  late String ics;
+  late String ics = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -60,9 +61,15 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
 
     setState(() {
       ics = logindata.getString('ic').toString();
-      names = snap.docs[0]['fullname'].toString();
-      weights = snap.docs[0]['weight'].toString();
-      heights = snap.docs[0]['height'].toString();
+      name.text = snap.docs[0]['fullname'].toString();
+      weight.text = snap.docs[0]['weight'].toString();
+      height.text = snap.docs[0]['height'].toString();
+      phone.text = snap.docs[0]['phone'].toString();
+      dob.text = snap.docs[0]['dob'].toString();
+      age.text = snap.docs[0]['age'].toString();
+      waist.text = snap.docs[0]['waist'].toString();
+      hip.text = snap.docs[0]['hip'].toString();
+
       bmis = bmi1.toString();
       bmistats = snap.docs[0]['bmistatus'].toString();
     });
@@ -99,11 +106,12 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             child: RaisedButton(
               elevation: 5,
               onPressed: () async {
+                final index = 0;
                 final action = await Dialogs.yesAbortDialog(
                     context, 'Confirm Discard?', 'Are you sure?');
                 if (action == DialogAction.yes) {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => UserHealthMenuScreen()));
+                      builder: (context) => UserMainScreen(myObject: index)));
                 }
               },
               padding: EdgeInsets.all(15),
@@ -388,10 +396,10 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
   }
 
   Widget buildWeightHeight() {
-    return new Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Flexible(
+        Flexible(
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
@@ -399,7 +407,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -410,18 +418,19 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             child: TextField(
               controller: weight,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black87),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon:
                       Icon(Icons.monitor_weight, color: Color(0x663e97a9)),
                   hintText: 'Weight in kg',
-                  hintStyle: TextStyle(color: Colors.black38)),
+                  hintStyle: TextStyle(color: Colors.black38),
+                  suffixText: 'kg'),
             ),
           ),
         )),
-        new Flexible(
+        Flexible(
             child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
@@ -429,7 +438,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 6,
@@ -440,14 +449,17 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   child: TextField(
                     controller: height,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.black87),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(top: 14),
                         prefixIcon:
                             Icon(Icons.height, color: Color(0x663e97a9)),
                         hintText: 'Height in meter',
-                        hintStyle: TextStyle(color: Colors.black38)),
+                        hintStyle: TextStyle(color: Colors.black38),
+                        suffix: Text(
+                          'm',
+                        )),
                   ),
                 )))
       ],
@@ -455,17 +467,17 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
   }
 
   Widget buildWaistHip() {
-    return new Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        new Flexible(
+        Flexible(
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -476,16 +488,19 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             child: TextField(
               controller: waist,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black87),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14, left: 20),
                   hintText: 'Waist in cm',
-                  hintStyle: TextStyle(color: Colors.black38)),
+                  hintStyle: TextStyle(color: Colors.black38),
+                  suffix: Text(
+                    'cm',
+                  )),
             ),
           ),
         )),
-        new Flexible(
+        Flexible(
             child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
@@ -493,7 +508,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 6,
@@ -504,12 +519,15 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   child: TextField(
                     controller: hip,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.black87),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 20),
                         hintText: 'Hip in cm',
-                        hintStyle: TextStyle(color: Colors.black38)),
+                        hintStyle: TextStyle(color: Colors.black38),
+                        suffix: Text(
+                          'cm',
+                        )),
                   ),
                 )))
       ],
@@ -696,10 +714,10 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 colors: [
-                  Color(0x66C4A195),
-                  Color(0x99C4A195),
-                  Color(0xccC4A195),
-                  Color(0xffC4A195),
+                  Color(0x663e97a9),
+                  Color(0x993e97a9),
+                  Color(0xcc3e97a9),
+                  Color(0xff3e97a9),
                 ],
               )),
               child: SingleChildScrollView(
@@ -709,7 +727,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Patient Information',
+                      'Information',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,
@@ -725,10 +743,6 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                     buildAge(),
                     buildWeightHeight(),
                     buildWaistHip(),
-                    SizedBox(height: 20),
-                    buildGender(),
-                    SizedBox(height: 20),
-                    buildAllergic(),
                     SizedBox(height: 15),
                     buildActiveType(),
                     SizedBox(height: 15),
