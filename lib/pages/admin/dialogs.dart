@@ -20,11 +20,11 @@ class Dialogs {
           title: Text(title),
           content: Text(body),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(DialogAction.abort),
               child: const Text('No'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(DialogAction.yes),
               child: const Text('Yes'),
             )

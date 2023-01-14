@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class UserHealthMenuScreen extends StatefulWidget {
   const UserHealthMenuScreen({Key? key}) : super(key: key);
@@ -45,16 +47,14 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+
         onPressed: () async {
           //String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => AdminMainScreen()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+   
         child: Text(
           'Back',
           style: TextStyle(
@@ -70,16 +70,14 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: 300,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+  
         onPressed: () async {
           //String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => userViewReport()));
         },
-        padding: EdgeInsets.all(55),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
-        color: Colors.white,
+        
         child: Text(
           'View Report',
           style: TextStyle(
@@ -95,16 +93,14 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+      
         onPressed: () async {
           //String ic = widget.myObject.toString();
           //Navigator.of(context).pushReplacement(MaterialPageRoute(
           // builder: (context) => AdminUpdateLipidProfile(myObject: ic)));
         },
-        padding: EdgeInsets.all(55),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+       
         child: Text(
           'Update Patient Lipid Profile',
           style: TextStyle(
@@ -117,44 +113,51 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
   }
 
   Widget buildInputPatientInfoBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 85),
-      width: 300,
-      child: RaisedButton(
-        elevation: 5,
+    return Center(child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 70,vertical: 80),
+ 
+      child:  Align(
+      alignment: Alignment.centerLeft,
+     child:ElevatedButton(
+      style: ButtonStyle(),
+    
         onPressed: () async {
           // String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => UserUpdateInfo()));
         },
-        padding: EdgeInsets.all(55),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
-        color: Colors.white,
-        child: Text(
+    
+        child: const Text(
           'Update Patient Profile',
+          textAlign: TextAlign.start,
           style: TextStyle(
-              color: Color(0xff3e97a9),
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
+              
+              fontSize: 22,
+              fontWeight: FontWeight.w300),
         ),
       ),
-    );
+    
+    ),
+      
+      
+      
+      
+      
+    ));
   }
 
   Widget buildInputMedPatientBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+  
         onPressed: () async {
           // String ic = widget.myObject.toString();
           //Navigator.of(context).pushReplacement(MaterialPageRoute(
           // builder: (context) => AdminPatientMedicine(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Update Patient Medicine',
           style: TextStyle(
@@ -170,8 +173,8 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+      
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
@@ -180,9 +183,7 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
                 MaterialPageRoute(builder: (context) => AdminMainScreen()));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+       
         child: Text(
           'Submit',
           style: TextStyle(
@@ -205,47 +206,224 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
       Icon(Icons.person, size: 30),
     ];
 
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 70),
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Align(
+            alignment: Alignment.center,
+            child: Text(
+                        'MyLipid',
+                        style: TextStyle(
+                          color: Colors.black,
+                            fontSize: 25, fontWeight: FontWeight.w500),
+                      ),
+          ),
+          backgroundColor: Color.fromARGB(0, 46, 41, 41),
+          elevation: 0,
+        ),
+        backgroundColor: Colors.transparent,
+        body: LoaderOverlay(
+          reverseDuration: const Duration(milliseconds: 250),
+          duration: Duration(milliseconds: 250),
+          child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Container(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Patient Info Menu',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Patient Info Menu',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w300),
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    buildInputPatientInfoBtn(),
-                    SizedBox(height: 5),
-                    buildViewReportBtn(),
+                    
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 59, 139, 231),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          height: 250,
+                          width: double.maxFinite,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Update Health Profile',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: 60.0,
+                                            maxWidth: 150.0,
+                                            minHeight: 30.0,
+                                            maxHeight: 100.0,
+                                          ),
+                                          //SET max width
+                                          child: AutoSizeText(
+                                            'Manage your latest health information here',
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white),
+                                            overflow: TextOverflow.visible,
+                                          ))
+                                    ],
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Image.asset(
+                                      'images/iconUpdateInfo.png',
+                                      scale: 1.15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF54D159),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UserUpdateInfo()),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              color: Color(0xFFCC3E8A),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          height: 250,
+                          width: double.maxFinite,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'View Patient Profile',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: 60.0,
+                                            maxWidth: 150.0,
+                                            minHeight: 30.0,
+                                            maxHeight: 100.0,
+                                          ),
+                                          //SET max width
+                                          child: AutoSizeText(
+                                            'View your health report and doctor’s note',
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white),
+                                            overflow: TextOverflow.visible,
+                                          ))
+                                    ],
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Image.asset(
+                                      'images/iconViewReport.png',
+                                      scale: 1.15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF54D159),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          userViewReport()),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
-              ),
-            )
-          ],
+              )),
         ),
       ),
     );

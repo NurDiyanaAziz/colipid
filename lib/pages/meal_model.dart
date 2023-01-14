@@ -4,7 +4,7 @@ class MealModel {
   String? lunch;
   String? morningtea;
   final String plan;
-  String plantype;
+  final String plantype;
   String? teatime;
   final String tag;
 

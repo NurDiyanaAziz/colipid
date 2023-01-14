@@ -36,8 +36,10 @@ class _UserSettingState extends State<UserSetting> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.red),
+        ),
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Logout?', 'Are you sure?');
@@ -47,9 +49,6 @@ class _UserSettingState extends State<UserSetting> {
                 MaterialPageRoute(builder: (context) => LoginPageScreen()));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color.fromARGB(255, 194, 33, 33),
         child: Text(
           'LOGOUT',
           style: TextStyle(

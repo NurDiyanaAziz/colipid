@@ -19,7 +19,6 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   //late List<User> users;
 
   final screens = [
-    AdminAddStaff(),
     AdminHomePageScreen(),
     AdminProfile(),
   ];
@@ -31,14 +30,13 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   }*/
 
   @override
-  int index = 1;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[
-      Icon(Icons.file_open, size: 30),
       Icon(Icons.home, size: 30),
-      Icon(Icons.person, size: 30),
+      Icon(Icons.logout, size: 30),
     ];
 
     return Scaffold(

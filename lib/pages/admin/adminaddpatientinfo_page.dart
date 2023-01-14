@@ -6,7 +6,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:age_calculator/age_calculator.dart';
+import 'package:intl/intl.dart';
 
+import '../body_model.dart';
 import 'adminpatientmenu_page.dart';
 import 'dialogs.dart';
 
@@ -19,6 +21,7 @@ class AdminAddPatientInfo extends StatefulWidget {
 }
 
 enum SingingCharacter { No, Yes }
+
 enum SingingCharacters { Male, Female }
 
 class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
@@ -47,8 +50,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
   final waist = TextEditingController();
   final hip = TextEditingController();
   final age = TextEditingController();
-  double? bmi = 0.0;
-  String? bmistat = '';
+  double bmi = 0.0;
+  String bmistat = '';
   String? hipwaistratio = '';
 
   void fetchUserData() async {
@@ -106,8 +109,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 70,
             width: 100,
-            child: RaisedButton(
-              elevation: 5,
+            child: ElevatedButton(
+             
               onPressed: () async {
                 final action = await Dialogs.yesAbortDialog(
                     context, 'Confirm Discard?', 'Are you sure?');
@@ -116,10 +119,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                       builder: (context) => AdminUpdatePatient(myObject: icc)));
                 }
               },
-              padding: EdgeInsets.all(15),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              color: Colors.white,
+             
               child: Text(
                 'Back',
                 style: TextStyle(
@@ -311,9 +311,15 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+
         onPressed: () async {
+          var now = DateTime.now();
+          var formatterDate = DateFormat('dd/MM/yyyy');
+          var formatterTime = DateFormat('HH:mm');
+          String actualDate = formatterDate.format(now);
+          String actualTime = formatterTime.format(now);
+
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
           if (action == DialogAction.yes) {
@@ -334,13 +340,13 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             String aller = _character.toString().substring(17);
 
             bmi = weights / (heights * heights);
-            if (bmi! < 18.5) {
+            if (bmi < 18.5) {
               bmistat = "underweight";
-            } else if (bmi! >= 18.5 && bmi! <= 24.9) {
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
               bmistat = "healthy weight";
-            } else if (bmi! >= 25.0 && bmi! <= 29.9) {
+            } else if (bmi >= 25.0 && bmi <= 29.9) {
               bmistat = "overweight";
-            } else if (bmi! >= 30) {
+            } else if (bmi >= 30) {
               bmistat = "obese";
             }
 
@@ -362,6 +368,22 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                 hipwaistratio = "Health Risk High";
               }
             }
+
+            final bodyprofile = BodyModel(
+              ic: ics,
+              date: actualDate,
+              time: actualTime,
+              bmi: bmi,
+              bmiStatus: bmistat,
+              weight: weights,
+              height: heights,
+              hip: hips,
+              waist: waists,
+              ratio: whratio,
+              ratiostat: hipwaistratio,
+              gender: gend,
+            );
+            inputBody(bodyprofile);
 
             final docUser =
                 FirebaseFirestore.instance.collection('users').doc(id);
@@ -407,9 +429,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                 builder: (context) => AdminUpdatePatient(myObject: icc)));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Submit',
           style: TextStyle(
@@ -420,18 +440,18 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
   }
 
   Widget buildWeightHeight() {
-    return new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new Flexible(
+        Flexible(
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -442,8 +462,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             child: TextField(
               controller: weight,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black87),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14),
                   prefixIcon:
@@ -453,15 +473,15 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             ),
           ),
         )),
-        new Flexible(
+        Flexible(
             child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 6,
@@ -472,8 +492,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                   child: TextField(
                     controller: height,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.black87),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(top: 14),
                         prefixIcon:
@@ -487,17 +507,17 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
   }
 
   Widget buildWaistHip() {
-    return new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new Flexible(
+        Flexible(
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 6,
@@ -508,8 +528,8 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             child: TextField(
               controller: waist,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black87),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 14, left: 20),
                   hintText: 'Waist in cm',
@@ -517,7 +537,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
             ),
           ),
         )),
-        new Flexible(
+        Flexible(
             child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
@@ -525,7 +545,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 6,
@@ -537,7 +557,7 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
                     controller: hip,
                     keyboardType: TextInputType.number,
                     style: TextStyle(color: Colors.black87),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 20),
                         hintText: 'Hip in cm',
@@ -774,4 +794,13 @@ class _AdminAddPatientInfoState extends State<AdminAddPatientInfo> {
       ),
     );
   }
+}
+
+Future inputBody(BodyModel lipid) async {
+  //reference document
+  final bodyP = FirebaseFirestore.instance.collection('bodyreport').doc();
+
+  lipid.id = bodyP.id;
+  final json = lipid.toJson();
+  await bodyP.set(json);
 }

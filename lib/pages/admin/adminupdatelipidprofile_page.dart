@@ -47,8 +47,13 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
 
   void initial() async {
     logindata = await SharedPreferences.getInstance();
+    QuerySnapshot snap1 = await FirebaseFirestore.instance
+        .collection("users")
+        .where("ic", isEqualTo: logindata.getString('ic').toString())
+        .get();
     setState(() {
       icuser = logindata.getString('ic').toString();
+      drname.text = "Dr. " + snap1.docs[0]['fullname'].toString();
     });
   }
 
@@ -77,7 +82,6 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
       times.text = actualTime;
       pname.text = snaps.docs[0]['fullname'].toString();
       pic.text = snap.docs[0]['ic'].toString();
-      drname.text = icuser;
 
       ;
     });
@@ -97,8 +101,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
       padding: const EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+  
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Discard?', 'Are you sure?');
@@ -108,9 +112,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
                 builder: (context) => AdminUpdatePatient(myObject: icc)));
           }
         },
-        padding: const EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Back',
           style: TextStyle(
@@ -503,8 +505,8 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+       
         onPressed: () async {
           String tcStat = "", triglyStat = "", hdlStat = "", ldlcStat = "";
 
@@ -591,9 +593,7 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
                 builder: (context) => AdminUpdatePatient(myObject: icc)));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Submit',
           style: TextStyle(
@@ -647,10 +647,6 @@ class _AdminUpdateLipidProfileState extends State<AdminUpdateLipidProfile> {
                     ),
                     SizedBox(height: 20),
                     buildBackBtn(),
-                    SizedBox(height: 5),
-                    buildPName(),
-                    SizedBox(height: 5),
-                    buildIC(),
                     SizedBox(height: 5),
                     buildDate(),
                     SizedBox(height: 5),

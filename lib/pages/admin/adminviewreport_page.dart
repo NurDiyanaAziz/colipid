@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../body_model.dart';
 import 'adminpatientmenu_page.dart';
 
 class AdminViewReportPatient extends StatefulWidget {
@@ -50,15 +51,13 @@ class _AdminViewReportPatientState extends State<AdminViewReportPatient> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+     
         onPressed: () async {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminUpdatePatient(myObject: icc)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Back',
           style: TextStyle(
@@ -69,6 +68,303 @@ class _AdminViewReportPatientState extends State<AdminViewReportPatient> {
       ),
     );
   }
+
+  Stream<List<LipidModel>> readLipidReport() => FirebaseFirestore.instance
+      .collection('lipidreport')
+      .where('ic', isEqualTo: icc)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => LipidModel.fromJson(doc.data())).toList());
+
+  Stream<List<BodyModel>> readBodyReport() => FirebaseFirestore.instance
+      .collection('bodyreport')
+      .where('ic', isEqualTo: icc)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => BodyModel.fromJson(doc.data())).toList());
+
+  Widget buildReportUsers(LipidModel e) => Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        elevation: 4,
+        shadowColor: Colors.black,
+        color: Color.fromARGB(255, 255, 255, 255),
+        child: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                //SizedBox
+                Text(
+                  e.date.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ), //Textstyle
+                ), //Text
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ), //Textstyle
+                ), //Text
+                //SizedBox
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          child: Text(
+                            'TC: ' + e.tc.toString(),
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ), //Textstyle
+                          ),
+                        ),
+                        Text(
+                          'HDL: ' + e.hdl.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'LDL: ' + e.tc.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'Trigly: ' + e.trigly.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          e.tcstatus.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          e.hdlstatus.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          e.ldlstatus.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          e.triglystatus.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                  child: Text(
+                    'Doctor comment: ' + e.comment.toString(),
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 29, 9, 83),
+                    ), //Textstyle
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                  height: 30,
+                  child: Text(
+                    'Doctor Name: ' + e.drname.toString(),
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ), //Textstyle
+                  ),
+                ), //SizedBox
+              ],
+            ), //Column
+          ), //Padding
+        ), //SizedBox
+      );
+
+  Widget buildBodyReportUsers(BodyModel e) => Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        elevation: 4,
+        shadowColor: Colors.black,
+        color: Color.fromARGB(255, 255, 254, 254),
+        child: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                //SizedBox
+                Text(
+                  e.date.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ), //Textstyle
+                ), //Text
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ), //Textstyle
+                ), //Text
+                //SizedBox
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Weight : ' + e.weight.toString(),
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ), //Textstyle
+                          ),
+                        ),
+                        Text(
+                          'Height : ' + e.height.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'BMI : ' +
+                              double.parse(e.bmi.toStringAsFixed(2)).toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'Waist : ' + e.waist.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'Hip : ' + e.hip.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          'W/H Ratio: ' +
+                              double.parse(e.ratio.toStringAsFixed(2))
+                                  .toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          ' ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          ' ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          e.bmiStatus,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          ' ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          '',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
+                          e.ratiostat.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 30,
+                ),
+              ],
+            ), //Column
+          ), //Padding
+        ), //SizedBox
+      );
 
 /*  Widget buildLineChart() {
     return Container(
@@ -131,10 +427,66 @@ class _AdminViewReportPatientState extends State<AdminViewReportPatient> {
                     ),
                     const SizedBox(height: 20),
                     buildBackBtn(),
-                    const SizedBox(height: 5),
-                    const SizedBox(height: 40),
-                    const SizedBox(height: 20),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 25),
+                    const SizedBox(
+                      height: 30,
+                      child: Text(
+                        'Lipid Report',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 400,
+                      child: StreamBuilder<List<LipidModel>>(
+                          stream: readLipidReport(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text(
+                                  'Something went wrong!: ${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              final users = snapshot.data!;
+
+                              return ListView(
+                                  children:
+                                      users.map(buildReportUsers).toList());
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                    ),
+                    SizedBox(height: 25),
+                    const SizedBox(
+                      height: 30,
+                      child: Text(
+                        'Body Report',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 400,
+                      child: StreamBuilder<List<BodyModel>>(
+                          stream: readBodyReport(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text(
+                                  'Something went wrong!: ${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              final users = snapshot.data!;
+
+                              return ListView(
+                                  children:
+                                      users.map(buildBodyReportUsers).toList());
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                    ),
                   ],
                 ),
               ),

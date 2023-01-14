@@ -34,16 +34,14 @@ class _AdminProfileState extends State<AdminProfile> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+        
         onPressed: () async {
           logindata.setBool('login', true);
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => LoginPageScreen()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color.fromARGB(255, 194, 33, 33),
+        
         child: Text(
           'LOGOUT',
           style: TextStyle(

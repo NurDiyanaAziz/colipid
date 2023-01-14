@@ -112,6 +112,7 @@ class _ChooseMealState extends State<ChooseMeal> {
       strTag.add(snap.docs[i]['tag'].toString());
       planName.add(snap.docs[i]['plan'].toString());
     }
+    strTag.add('null');
   }
 
   final pref = TextEditingController();
@@ -320,6 +321,7 @@ class _ChooseMealState extends State<ChooseMeal> {
   static const targetStrings = <String?>[];
 
   var arr = [];
+
   //string similirity score (recommendation)
   Widget buildUserPreference() {
     return Container(
@@ -564,7 +566,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: () async {
                         final checkIC = prefer.text;
                         //final user = UserModel(ic: checkIC);
@@ -595,7 +597,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                         "Submit",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.green,
+                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
                     ),
                   )
                 ],
@@ -720,7 +722,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(
-                              height: 600,
+                              height: 750,
                               child: StreamBuilder<List<MealModel>>(
                                   stream: readMeal(),
                                   builder: (context, snapshot) {

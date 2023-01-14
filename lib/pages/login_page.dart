@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../homepage_screen.dart';
 import 'admin/adminhome_page.dart';
 import 'admin/adminmain.dart';
-import 'otp_screen.dart';
+
 import 'user/userhome_page.dart';
 
 class LoginPageScreen extends StatefulWidget {
@@ -81,7 +81,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
           .where("phone", isEqualTo: phoneno)
           .get();
 
-      if (snap.size > 0) {
+      if (snap.size == 0) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("User Not Exist!")));
+      } else {
         final user = snap.docs[0]['usertype'].toString();
         final ic = snap.docs[0]['ic'].toString();
         logindata.setBool('login', false);
@@ -97,9 +100,6 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => AdminMainScreen()));
         }
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("User Not Exist!")));
       }
 
       //context.read<AuthService>().login(snap.docs[18]['phone']);
@@ -183,67 +183,12 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
         onPressed: validateAndSubmit,
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
         child: Text(
           'LOGIN',
           style: TextStyle(
-              color: Color(0xff3e97a9),
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-
-  Widget buildAdminBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
-        onPressed: () async {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => AdminMainScreen()));
-        },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
-        child: Text(
-          'TESTING ADMIN',
-          style: TextStyle(
-              color: Color(0xff3e97a9),
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-
-  Widget buildUserBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
-        onPressed: () async {
-          final index = 1;
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => UserMainScreen(
-                    myObject: index,
-                  )));
-        },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
-        child: Text(
-          'TESTING USER',
-          style: TextStyle(
-              color: Color(0xff3e97a9),
+              color: Color.fromARGB(255, 255, 255, 255),
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ),
@@ -274,20 +219,26 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
             )),
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 220),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 100),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(
+                    child: Image.asset(
+                      'images/myLipid.png',
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
                   Text(
-                    'Login',
+                    'MyLipid',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 40,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 50),
-                  buildPhoneNumber(),
                   SizedBox(height: 20),
+                  buildPhoneNumber(),
                   buildLoginBtn(),
                 ],
               ),

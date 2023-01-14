@@ -3,6 +3,7 @@ import 'package:colipid/pages/user/app_large_text.dart';
 import 'package:colipid/pages/user/app_text.dart';
 import 'package:colipid/pages/user/choosemeal_page.dart';
 import 'package:colipid/pages/user/usermain.dart';
+import 'package:colipid/pages/user/viewmealtaken.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,18 +14,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../admin/dialogs.dart';
 import '../mealtaken_model.dart';
 
-class MenuDetail extends StatefulWidget {
+class MenuDetailReport extends StatefulWidget {
   //const AdminViewReportPatient({Key? key}) : super(key: key);
   var myObject;
-  MenuDetail({required this.plan, required this.plantype});
+  MenuDetailReport({required this.plan});
   final String plan;
-  final String plantype;
 
   @override
-  _MenuDetailState createState() => _MenuDetailState();
+  _MenuDetailReportState createState() => _MenuDetailReportState();
 }
 
-class _MenuDetailState extends State<MenuDetail> {
+class _MenuDetailReportState extends State<MenuDetailReport> {
   int index = 1;
 
   List text1 = ["Breakfast", "Morning Tea", "Lunch", "Teatime", "Dinner"];
@@ -61,7 +61,6 @@ class _MenuDetailState extends State<MenuDetail> {
   Future<void> fetchDetail() async {
     // do something
     String planname = widget.plan;
-    String plantype1 = widget.plantype;
 
     QuerySnapshot snap = await FirebaseFirestore.instance
         .collection("mealplan")
@@ -80,20 +79,17 @@ class _MenuDetailState extends State<MenuDetail> {
       detailteatime = arrayTeatime.split('+');
       detaildinner = arrayDinner.split('+');
       plannames = planname;
-      plantypes = plantype1;
     });
   }
 
   late SharedPreferences logindata;
   late String plannames = "";
-  late String plantypes = "";
 
-  Widget buildBackChooseBtn() {
+  Widget buildBackSubmmimtBtn() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Flexible(
-          flex: 1,
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
@@ -102,10 +98,10 @@ class _MenuDetailState extends State<MenuDetail> {
             width: 100,
             child: ElevatedButton(
               onPressed: () async {
-                final index = 0;
+                final index = 1;
 
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ChooseMeal(myObject: plantypes)));
+                    builder: (context) => userViewMealTaken(myObject: index)));
               },
               child: Text(
                 'Back',
@@ -117,106 +113,7 @@ class _MenuDetailState extends State<MenuDetail> {
             ),
           ),
         )),
-        Flexible(
-          flex: 1,
-            child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            height: 70,
-            width: 200,
-            child: ElevatedButton(
-              onPressed: () async {
-                final action = await Dialogs.yesAbortDialog(
-                    context, 'Confirm?', 'Are you sure?');
-                if (action == DialogAction.yes) {
-                  var now = DateTime.now();
-                  var formatterDate = DateFormat('dd/MM/yyyy');
-                  var formatterTime = DateFormat('HH:mm');
-                  String actualDate = formatterDate.format(now);
-                  String actualTime = formatterTime.format(now);
-
-                  final index = 1;
-                  final ic;
-
-                  logindata = await SharedPreferences.getInstance();
-
-                  final mealprofile = MealTakenModel(
-                    ic: logindata.getString('ic').toString(),
-                    date: actualDate,
-                    time: actualTime,
-                    plan: plannames,
-                    plantype: plantypes,
-                  );
-                  inputMeal(mealprofile);
-
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Meal succesful added into the list")));
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => UserMainScreen(myObject: index)));
-                }
-              },
-              child: Text(
-                'Choose This Meal',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        )),
       ],
-    );
-  }
-
-  Widget buildSubmitBtn() {
-    return Container(
-    
-      padding: EdgeInsets.symmetric(vertical: 5),
-      width: 100,
-      child: ElevatedButton(
-
-        onPressed: () async {
-          var now = DateTime.now();
-          var formatterDate = DateFormat('dd/MM/yyyy');
-          var formatterTime = DateFormat('HH:mm');
-          String actualDate = formatterDate.format(now);
-          String actualTime = formatterTime.format(now);
-
-          final action = await Dialogs.yesAbortDialog(
-              context, 'Confirm Submit?', 'Are you sure?');
-          if (action == DialogAction.yes) {
-            QuerySnapshot snap = await FirebaseFirestore.instance
-                .collection("users")
-                .where("ic", isEqualTo: logindata.getString('ic').toString())
-                .get();
-
-            String id = snap.docs[0]['id'].toString();
-
-            final mealtaken = MealTakenModel(
-              ic: logindata.getString('ic').toString(),
-              date: actualDate,
-              time: actualTime,
-            );
-            inputMeal(mealtaken);
-
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Exercise succesful added into the list")));
-
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => UserMainScreen(
-                      myObject: 1,
-                    )));
-          }
-        },
-       
-        child: Text(
-          'Submit',
-          style: TextStyle(
-              color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 
@@ -235,16 +132,26 @@ class _MenuDetailState extends State<MenuDetail> {
     ];
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
-        child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Colors.white, Colors.white],
+              )),
+              child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: MediaQuery.of(context).size.height-80,
+                      height: 800,
                       child: PageView(
                         controller: page,
                         scrollDirection: Axis.horizontal,
@@ -357,12 +264,13 @@ class _MenuDetailState extends State<MenuDetail> {
 
                     // buildViewMeal(),
 
-                    buildBackChooseBtn(),
+                    buildBackSubmmimtBtn(),
                   ],
                 ),
               ),
-
-             
+            )
+          ],
+        ),
       ),
     );
   }

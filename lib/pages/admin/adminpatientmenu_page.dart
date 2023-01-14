@@ -54,8 +54,8 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+       
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Discard?', 'Are you sure?');
@@ -66,9 +66,7 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
                 MaterialPageRoute(builder: (context) => AdminMainScreen()));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+       
         child: Text(
           'Back',
           style: TextStyle(
@@ -84,16 +82,14 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+
         onPressed: () async {
           String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminViewReportPatient(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'View Report',
           style: TextStyle(
@@ -109,16 +105,14 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+      
         onPressed: () async {
           String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminUpdateLipidProfile(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Update Patient Lipid Profile',
           style: TextStyle(
@@ -134,16 +128,14 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+       
         onPressed: () async {
           String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminAddPatientInfo(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Update Patient Profile',
           style: TextStyle(
@@ -159,16 +151,14 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+       
         onPressed: () async {
           String ic = widget.myObject.toString();
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminPatientMedicine(myObject: ic)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Update Patient Medicine',
           style: TextStyle(
@@ -184,8 +174,8 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+      
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
@@ -194,9 +184,7 @@ class _AdminUpdatePatientState extends State<AdminUpdatePatient> {
                 MaterialPageRoute(builder: (context) => AdminMainScreen()));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Finish',
           style: TextStyle(

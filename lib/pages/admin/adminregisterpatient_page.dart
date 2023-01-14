@@ -46,15 +46,13 @@ class _AdminRegisterPatientState extends State<AdminRegisterPatient> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+        
         onPressed: () async {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => AdminMainScreen()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Back',
           style: TextStyle(
@@ -178,8 +176,8 @@ class _AdminRegisterPatientState extends State<AdminRegisterPatient> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 90,
       width: 130,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+       
         onPressed: () async {
           final fullname = name.text;
           final phone = phones.text;
@@ -195,9 +193,7 @@ class _AdminRegisterPatientState extends State<AdminRegisterPatient> {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => AdminMainScreen()));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Submit',
           style: TextStyle(

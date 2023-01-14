@@ -22,6 +22,7 @@ class UserUpdateInfo extends StatefulWidget {
 }
 
 enum SingingCharacter { No, Yes }
+
 enum SingingCharacters { Male, Female }
 
 class _UserUpdateInfoState extends State<UserUpdateInfo> {
@@ -105,8 +106,8 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 70,
             width: 100,
-            child: RaisedButton(
-              elevation: 5,
+            child: ElevatedButton(
+       
               onPressed: () async {
                 final index = 0;
                 final action = await Dialogs.yesAbortDialog(
@@ -116,10 +117,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                       builder: (context) => UserMainScreen(myObject: index)));
                 }
               },
-              padding: EdgeInsets.all(15),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              color: Colors.white,
+             
               child: Text(
                 'Back',
                 style: TextStyle(
@@ -311,8 +309,8 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+  
         onPressed: () async {
           var now = DateTime.now();
           var formatterDate = DateFormat('dd/MM/yyyy');
@@ -407,9 +405,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                 builder: (context) => UserMainScreen(myObject: 0)));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+      
         child: Text(
           'Submit',
           style: TextStyle(
@@ -499,14 +495,13 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
           padding: const EdgeInsets.all(5.0),
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 6,
-                      offset: Offset(0, 2))
-                ]),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
+              ],
+            ),
             height: 60,
             width: 180,
             child: TextField(
@@ -553,6 +548,47 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                           'cm',
                         )),
                   ),
+                )))
+      ],
+    );
+  }
+
+  Widget buildWaistHipLabel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Flexible(
+            child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            width: 180,
+            child: Column(children: [
+              Text(
+                "Waist",
+                style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600),
+              ),
+            ]),
+          ),
+        )),
+        Flexible(
+            child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  width: 180,
+                  child: Column(children: [
+                    Text(
+                      "Hip",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ]),
                 )))
       ],
     );
@@ -760,12 +796,10 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                     SizedBox(height: 5),
                     buildBack(),
                     SizedBox(height: 30),
-                    buildID(),
                     buildName(),
-                    buildPhone(),
-                    buildDateBirth(),
                     buildAge(),
                     buildWeightHeight(),
+                    buildWaistHipLabel(),
                     buildWaistHip(),
                     SizedBox(height: 15),
                     buildActiveType(),

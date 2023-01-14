@@ -305,7 +305,6 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
                     textAlign: TextAlign.center,
@@ -413,7 +412,8 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red)),
                       onPressed: () async {
                         final checkIC = checkic.text;
                         //final user = UserModel(ic: checkIC);
@@ -453,7 +453,7 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                         "Submit",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.red[400],
+                      
                     ),
                   )
                 ],
@@ -462,29 +462,6 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
           ),
         );
       });
-
-  /*Widget checkPat() {
-    return Flexible(
-        child: StreamBuilder(
-      stream: Firestore.instance
-          .collection('users')
-          .where('ic', isGreaterThanOrEqualTo: filter.toLowerCase())
-          .limit(1)
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if(!snapshot.hasData){
-          return new Column(
-            children: <Widget>[
-              new Card(
-                elevation: 5.0,
-                child: Text(''),
-              )
-            ],
-          )
-        }
-      },
-    ));
-  }*/
 
   Stream<List<PatientListModel>> readUsers() => FirebaseFirestore.instance
       .collection('listpatient')
@@ -540,6 +517,8 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
+                    buildRegBtn(),
+                    SizedBox(height: 30),
                     Text(
                       'List of Patient-In-Waiting',
                       style: TextStyle(
@@ -547,10 +526,8 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 20),
-                    buildRegBtn(),
                     SizedBox(
-                      height: 500,
+                      height: 450,
                       child: StreamBuilder<List<PatientListModel>>(
                           stream: readUsers(),
                           builder: (context, snapshot) {

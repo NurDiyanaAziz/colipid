@@ -1,5 +1,5 @@
 class LipidModel {
-  String date;
+  String? date;
   String? id;
   String? time;
   String? comment;

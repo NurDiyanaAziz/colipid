@@ -673,7 +673,7 @@ class _ChooseExerciseState extends State<ChooseExercise> {
                           time: actualTime,
                           durations: double.parse(dur),
                           name: name,
-                          cal: total,
+                          cal: double.parse((total).toStringAsFixed(2)),
                         );
                         inputExercise(exerprofile);
 
@@ -710,13 +710,10 @@ class _ChooseExerciseState extends State<ChooseExercise> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: 20,
                     width: 50,
-                    child: RaisedButton(
-                      elevation: 5,
+                    child: ElevatedButton(
+                   
                       onPressed: () async {},
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      color: Colors.white,
+                     
                       child: Text(
                         'Beginner',
                         style: TextStyle(
@@ -765,7 +762,7 @@ class _ChooseExerciseState extends State<ChooseExercise> {
                     indicatorColor: Theme.of(context).primaryColor,
                     indicatorWeight: 3,
                     unselectedLabelColor: Color.fromARGB(255, 184, 183, 183),
-                    tabs: const [
+                    tabs: [
                       Text(
                         "Exercise",
                         style: TextStyle(
@@ -781,7 +778,7 @@ class _ChooseExerciseState extends State<ChooseExercise> {
                     ],
                   ),
                   backgroundColor: Color.fromARGB(255, 62, 151, 169),
-                  title: const Text(
+                  title: Text(
                     'Exercise',
                     style: TextStyle(
                         color: Colors.white,
@@ -802,7 +799,7 @@ class _ChooseExerciseState extends State<ChooseExercise> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(
-                              height: 600,
+                              height: 750,
                               child: StreamBuilder<List<ExerciseModel>>(
                                   stream: readExercise(),
                                   builder: (context, snapshot) {

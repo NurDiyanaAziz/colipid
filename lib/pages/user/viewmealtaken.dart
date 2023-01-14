@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colipid/pages/admin/dialogs.dart';
-import 'package:colipid/pages/body_model.dart';
-import 'package:colipid/pages/lipid_model.dart';
+
+import 'package:colipid/pages/user/medudetailreport.dart';
 import 'package:colipid/pages/user/usermain.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -24,17 +23,6 @@ class userViewMealTaken extends StatefulWidget {
 class _userViewMealTakenState extends State<userViewMealTaken> {
   int index = 1;
 
-  /* late List<charts.Series<LipidModel, String>> _seriesBarData;
-  late List<LipidModel> myData;
-  _generateData(myData) {
-    _seriesBarData.add(charts.Series(
-        domainFn: (LipidModel lipid, _) => lipid.date.toString(),
-        measureFn: (LipidModel lipid, _) => lipid.tc,
-        id: 'LipidModel',
-        data: myData,
-        labelAccessorFn: (LipidModel row, _) => "${row.date}"));
-  }*/
-
   @override
   void initState() {
     super.initState();
@@ -47,13 +35,18 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
 
   late String icc = "";
   late String total = "";
+  String actualDate = "";
   Future<void> fetchUser() async {
     // do something
     logindata = await SharedPreferences.getInstance();
     String ic = logindata.getString('ic').toString();
+    var now = DateTime.now();
+    var formatterDate = DateFormat('dd/MM/yyyy');
+    String date = formatterDate.format(now);
 
     setState(() {
       icc = ic;
+      actualDate = date;
     });
   }
 
@@ -128,6 +121,14 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                           ),
                         ),
                         Text(
+                          'Calories: ' + e.plantype,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ), //Textstyle
+                        ),
+                        Text(
                           'Time Added: ' + e.time.toString(),
                           style: TextStyle(
                             fontSize: 20,
@@ -137,13 +138,33 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                       ],
                     ),
                     SizedBox(
-                      width: 30,
+                      height: 30,
                     ),
                   ],
                 ),
-
                 SizedBox(
                   height: 30,
+                ),
+                SizedBox(
+                  height: 30,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 86, 133, 104)),
+                    ),
+                    onPressed: () async {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) =>
+                              MenuDetailReport(plan: e.plan)));
+                    },
+                    child: Text(
+                      'VIEW',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
 
                 //SizedBox
@@ -157,6 +178,7 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
       FirebaseFirestore.instance
           .collection('mealtaken')
           .where('ic', isEqualTo: icc)
+          .where("date", isEqualTo: actualDate)
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => MealTakenModel.fromJson(doc.data()))
@@ -173,18 +195,15 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: 70,
                     width: 100,
-                    child: RaisedButton(
-                      elevation: 5,
+                    child: ElevatedButton(
+                   
                       onPressed: () async {
                         final index = 1;
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) =>
                                 UserMainScreen(myObject: index)));
                       },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      color: Colors.white,
+                  
                       child: Text(
                         'Back',
                         style: TextStyle(
@@ -196,22 +215,6 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                   )))
         ]);
   }
-
-/*  Widget buildLineChart() {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        height: 70,
-        width: 100,
-        child: SfCartesianChart(
-            primaryXAxis: DateTimeAxis(),
-            series: <ChartSeries>[
-              // Renders line chart
-              LineSeries<SalesData, int>(
-                  dataSource: chartData,
-                  xValueMapper: (SalesData sales, _) => sales.year,
-                  yValueMapper: (SalesData sales, _) => sales.sales)
-            ]));
-  }*/
 
   @override
   Widget build(BuildContext context) {

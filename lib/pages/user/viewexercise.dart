@@ -146,7 +146,7 @@ class _userViewExerciseState extends State<userViewExercise> {
                 ),
                 SizedBox(
                   child: Text(
-                    'Duration of Exercise: ' + e.durations.toString(),
+                    'Duration of Exercise: ' + e.durations.toString() + ' min',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 20,
@@ -329,18 +329,15 @@ class _userViewExerciseState extends State<userViewExercise> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: 70,
                     width: 100,
-                    child: RaisedButton(
-                      elevation: 5,
+                    child: ElevatedButton(
+                   
                       onPressed: () async {
                         final index = 1;
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) =>
                                 UserMainScreen(myObject: index)));
                       },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      color: Colors.white,
+                     
                       child: Text(
                         'Back',
                         style: TextStyle(
@@ -352,22 +349,6 @@ class _userViewExerciseState extends State<userViewExercise> {
                   )))
         ]);
   }
-
-/*  Widget buildLineChart() {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        height: 70,
-        width: 100,
-        child: SfCartesianChart(
-            primaryXAxis: DateTimeAxis(),
-            series: <ChartSeries>[
-              // Renders line chart
-              LineSeries<SalesData, int>(
-                  dataSource: chartData,
-                  xValueMapper: (SalesData sales, _) => sales.year,
-                  yValueMapper: (SalesData sales, _) => sales.sales)
-            ]));
-  }*/
 
   @override
   Widget build(BuildContext context) {

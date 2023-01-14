@@ -33,15 +33,17 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[
-      Icon(Icons.file_copy, size: 30),
-      Icon(Icons.home, size: 30),
-      Icon(Icons.settings, size: 30),
+      Icon(Icons.file_copy, size: 30, color: index == 0? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
+      Icon(Icons.home, size: 30, color: index == 1? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
+      Icon(Icons.logout, size: 30, color: index == 2? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
     ];
 
     return Scaffold(
       body: screens[index],
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Color.fromARGB(255, 62, 151, 169),
+        
+        color: Color.fromARGB(255, 62, 151, 169),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         height: 60,
         index: index,
         items: items,

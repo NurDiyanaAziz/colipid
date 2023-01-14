@@ -39,15 +39,13 @@ class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
       padding: EdgeInsets.symmetric(vertical: 10),
       height: 70,
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+     
         onPressed: () async {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => AdminUpdatePatient(myObject: icc)));
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+        
         child: Text(
           'Back',
           style: TextStyle(
@@ -161,8 +159,8 @@ class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       width: 100,
-      child: RaisedButton(
-        elevation: 5,
+      child: ElevatedButton(
+    
         onPressed: () async {
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
@@ -189,9 +187,7 @@ class _AdminPatientMedicineState extends State<AdminPatientMedicine> {
                 builder: (context) => AdminUpdatePatient(myObject: icc)));
           }
         },
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+     
         child: Text(
           'Submit',
           style: TextStyle(

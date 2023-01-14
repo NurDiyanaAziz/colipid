@@ -61,7 +61,7 @@ class _userViewReportState extends State<userViewReport> {
               children: [
                 //SizedBox
                 Text(
-                  e.date,
+                  e.date.toString(),
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -357,18 +357,15 @@ class _userViewReportState extends State<userViewReport> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: 70,
                     width: 100,
-                    child: RaisedButton(
-                      elevation: 5,
+                    child: ElevatedButton(
+                  
                       onPressed: () async {
                         final index = 0;
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) =>
                                 UserMainScreen(myObject: index)));
                       },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      color: Colors.white,
+                    
                       child: Text(
                         'Back',
                         style: TextStyle(
@@ -453,7 +450,7 @@ class _userViewReportState extends State<userViewReport> {
                       ),
                     ),
                     SizedBox(
-                      height: 400,
+                      height: 350,
                       child: StreamBuilder<List<LipidModel>>(
                           stream: readLipidReport(),
                           builder: (context, snapshot) {
@@ -471,7 +468,6 @@ class _userViewReportState extends State<userViewReport> {
                             }
                           }),
                     ),
-                    const SizedBox(height: 30),
                     const SizedBox(
                       height: 30,
                       child: Text(
@@ -483,7 +479,7 @@ class _userViewReportState extends State<userViewReport> {
                       ),
                     ),
                     SizedBox(
-                      height: 400,
+                      height: 350,
                       child: StreamBuilder<List<BodyModel>>(
                           stream: readBodyReport(),
                           builder: (context, snapshot) {

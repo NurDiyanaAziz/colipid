@@ -1,7 +1,7 @@
 class MealTakenModel {
   String plan;
   String id;
-  String? plantype;
+  String plantype;
   String? date;
   String? time;
   final String ic;
