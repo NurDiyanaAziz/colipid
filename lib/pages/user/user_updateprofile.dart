@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colipid/pages/body_model.dart';
 import 'package:colipid/pages/patientlist_model.dart';
 import 'package:colipid/pages/user/userhealthmenu.dart';
 import 'package:colipid/pages/user/usermain.dart';
@@ -8,6 +9,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:age_calculator/age_calculator.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../admin/dialogs.dart';
@@ -88,9 +90,9 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
   final waist = TextEditingController();
   final hip = TextEditingController();
   final age = TextEditingController();
-  double? bmi = 0.0;
-  String? bmistat = '';
-  String? hipwaistratio = '';
+  double bmiss = 0.0;
+  String bmistat = '';
+  String hipwaistratio = '';
 
   Widget buildBack() {
     return Row(
@@ -312,12 +314,18 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
       child: RaisedButton(
         elevation: 5,
         onPressed: () async {
+          var now = DateTime.now();
+          var formatterDate = DateFormat('dd/MM/yyyy');
+          var formatterTime = DateFormat('HH:mm');
+          String actualDate = formatterDate.format(now);
+          String actualTime = formatterTime.format(now);
+
           final action = await Dialogs.yesAbortDialog(
               context, 'Confirm Submit?', 'Are you sure?');
           if (action == DialogAction.yes) {
             QuerySnapshot snap = await FirebaseFirestore.instance
                 .collection("users")
-                .where("ic", isEqualTo: ics)
+                .where("ic", isEqualTo: logindata.getString('ic').toString())
                 .get();
 
             String id = snap.docs[0]['id'].toString();
@@ -330,14 +338,14 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             String gend = _characters.toString().substring(18);
             String aller = _character.toString().substring(17);
 
-            bmi = weights / (heights * heights);
-            if (bmi! < 18.5) {
+            bmiss = weights / (heights * heights);
+            if (bmiss < 18.5) {
               bmistat = "underweight";
-            } else if (bmi! >= 18.5 && bmi! <= 24.9) {
+            } else if (bmiss >= 18.5 && bmiss <= 24.9) {
               bmistat = "healthy weight";
-            } else if (bmi! >= 25.0 && bmi! <= 29.9) {
+            } else if (bmiss >= 25.0 && bmiss <= 29.9) {
               bmistat = "overweight";
-            } else if (bmi! >= 30) {
+            } else if (bmiss >= 30) {
               bmistat = "obese";
             }
 
@@ -360,6 +368,22 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
               }
             }
 
+            final bodyprofile = BodyModel(
+              ic: logindata.getString('ic').toString(),
+              date: actualDate,
+              time: actualTime,
+              bmi: bmiss,
+              bmiStatus: bmistat,
+              weight: weights,
+              height: heights,
+              hip: hips,
+              waist: waists,
+              ratio: whratio,
+              ratiostat: hipwaistratio,
+              gender: gend,
+            );
+            inputBody(bodyprofile);
+
             final docUser =
                 FirebaseFirestore.instance.collection('users').doc(id);
 
@@ -367,7 +391,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
               'active': active,
               'dob': dob.text,
               'allergic': aller,
-              'bmi': bmi,
+              'bmi': bmiss,
               'gender': gend,
               'bmistatus': bmistat,
               'age': ages,
@@ -380,7 +404,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             });
 
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => UserHealthMenuScreen()));
+                builder: (context) => UserMainScreen(myObject: 0)));
           }
         },
         padding: EdgeInsets.all(15),
@@ -756,4 +780,13 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
       ),
     );
   }
+}
+
+Future inputBody(BodyModel lipid) async {
+  //reference document
+  final bodyP = FirebaseFirestore.instance.collection('bodyreport').doc();
+
+  lipid.id = bodyP.id;
+  final json = lipid.toJson();
+  await bodyP.set(json);
 }

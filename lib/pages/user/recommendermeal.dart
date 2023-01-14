@@ -11,17 +11,10 @@ late String prefs3 = '';
 late String prefs4 = '';
 
 class recommendMeal extends StatefulWidget {
-  const recommendMeal(
-      {Key? key,
-      required title1,
-      required title2,
-      required title3,
-      required title4})
-      : super(key: key);
-  final String title1 = '';
-  final String title2 = '';
-  final String title3 = '';
-  final String title4 = '';
+  const recommendMeal({
+    Key? key,
+  }) : super(key: key);
+
   // var myObject;
   // recommendMeal(@required String planname, String planname1, String planname2,
   // String planname3,
@@ -35,23 +28,14 @@ class _recommendMealState extends State<recommendMeal> {
   int index = 1;
   String tag = '';
   List<MealModel> _users = [];
+  final String title = "hello";
 
   @override
   void initState() {
     super.initState();
-    fetchPlanData();
   }
 
   // var planname = [];
-
-  void fetchPlanData() async {
-    // do something
-
-    prefs1 = '${widget.title1}';
-    prefs2 = '${widget.title2}';
-    prefs3 = '${widget.title3}';
-    prefs4 = '${widget.title4}';
-  }
 
   Widget buildUser(MealModel e) => Card(
       elevation: 5,
@@ -86,69 +70,10 @@ class _recommendMealState extends State<recommendMeal> {
     ];
 
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 70),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'HEllo',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: Text('${widget.title1}'),
-                    ),
-                    SizedBox(
-                        height: 5,
-                        child: StreamBuilder<List<MealModel>>(
-                            stream: readMeal(prefs1, prefs2, prefs3, prefs4),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return Text(
-                                    'Something went wrong!: ${snapshot.error}');
-                              } else if (snapshot.hasData) {
-                                final users = snapshot.data!;
-
-                                return ListView(
-                                    children: users.map(buildUser).toList());
-                              } else {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
-                            })),
-                    SizedBox(height: 40),
-                    SizedBox(height: 20),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('widget.title'),
       ),
+      body: Text(''),
     );
   }
 }

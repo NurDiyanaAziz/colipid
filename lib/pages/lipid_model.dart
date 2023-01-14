@@ -58,4 +58,21 @@ class LipidModel {
 
   @override
   String toString() => "Record<$date:$tc:$hdl:$ldl:$trigly>";
+
+  static LipidModel fromJson(Map<String, dynamic> json) => LipidModel(
+        id: json['id'],
+        date: json['date'],
+        comment: json['comment'],
+        time: json['time'],
+        ic: json['ic'],
+        tc: json['tc'],
+        hdl: json['hdl'],
+        ldl: json['ldl'],
+        trigly: json['trigly'],
+        tcstatus: json['tcstatus'],
+        hdlstatus: json['hdlstatus'],
+        ldlstatus: json['ldlstatus'],
+        triglystatus: json['triglystatus'],
+        drname: json['drname'],
+      );
 }

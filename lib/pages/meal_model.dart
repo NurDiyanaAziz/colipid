@@ -4,7 +4,7 @@ class MealModel {
   String? lunch;
   String? morningtea;
   final String plan;
-  String? plantype;
+  String plantype;
   String? teatime;
   final String tag;
 
@@ -20,7 +20,7 @@ class MealModel {
   });
 
   static MealModel fromJson(Map<String, dynamic> json) => MealModel(
-      breakfast: json['id'],
+      breakfast: json['breakfast'],
       morningtea: json['fullname'],
       lunch: json['ic'],
       teatime: json['teatime'],

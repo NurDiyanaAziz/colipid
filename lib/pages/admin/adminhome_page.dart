@@ -315,7 +315,7 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: () async {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) =>
@@ -325,12 +325,11 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                         "Menu",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.blue[400],
                     ),
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: () async {
                         final action = await Dialogs.yesAbortDialog(
                             context,
@@ -355,7 +354,7 @@ class _AdminHomePageScreenState extends State<AdminHomePageScreen> {
                         "Done Session",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.red[400],
+                      //color: Colors.red[400],
                     ),
                   )
                 ],

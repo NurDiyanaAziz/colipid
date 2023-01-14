@@ -281,8 +281,21 @@ class _ChooseMealState extends State<ChooseMeal> {
                           subtitle: Text(tag),
                           trailing: IconButton(
                               icon: Icon(Icons.folder),
-                              onPressed: () {
-                                //openDialog(e);
+                              onPressed: () async {
+                                QuerySnapshot snap = await FirebaseFirestore
+                                    .instance
+                                    .collection("mealplan")
+                                    .where('plan', isEqualTo: name)
+                                    .get();
+
+                                String plantype =
+                                    snap.docs[0]['plantype'].toString();
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => MenuDetail(
+                                              plan: name,
+                                              plantype: plantype,
+                                            )));
                               }),
                         )),
                   ),
@@ -307,15 +320,12 @@ class _ChooseMealState extends State<ChooseMeal> {
   static const targetStrings = <String?>[];
 
   var arr = [];
+  //string similirity score (recommendation)
   Widget buildUserPreference() {
     return Container(
       child: ElevatedButton(
         onPressed: () async {
           String texts = pref.text.toString();
-
-          // if (snapshot.) {
-          //strTag.add(snap.docs[i]['tag'].toString());
-          // }
 
           final bestMatch = StringSimilarity.findBestMatch(texts, strTag);
           int index = bestMatch.bestMatchIndex;
@@ -323,7 +333,7 @@ class _ChooseMealState extends State<ChooseMeal> {
           openDialog(planName[index].toString(),
               bestMatch.bestMatch.target.toString());
         },
-        child: Text(
+        child: const Text(
           'GENERATE',
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
@@ -481,8 +491,8 @@ class _ChooseMealState extends State<ChooseMeal> {
     );
   }
 
-  Widget buildUsers(MealModel e) => Card(
-      margin: EdgeInsets.all(44),
+  Widget buildMeals(MealModel e) => Card(
+      margin: EdgeInsets.all(14),
       elevation: 15,
       child: ListTile(
         title: Text(e.plan),
@@ -618,17 +628,16 @@ class _ChooseMealState extends State<ChooseMeal> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: () async {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) =>
-                                MenuDetail(myObject: e.plan)));
+                            builder: (context) => MenuDetail(
+                                plan: e.plan, plantype: e.plantype)));
                       },
                       child: Text(
-                        "Menu",
+                        "View",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.blue[400],
                     ),
                   ),
                 ],
@@ -711,7 +720,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(
-                              height: 900,
+                              height: 600,
                               child: StreamBuilder<List<MealModel>>(
                                   stream: readMeal(),
                                   builder: (context, snapshot) {
@@ -723,7 +732,7 @@ class _ChooseMealState extends State<ChooseMeal> {
 
                                       return ListView(
                                           children:
-                                              users.map(buildUsers).toList());
+                                              users.map(buildMeals).toList());
                                     } else {
                                       return Center(
                                           child: CircularProgressIndicator());
@@ -743,6 +752,16 @@ class _ChooseMealState extends State<ChooseMeal> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             buildPref(),
+                            const SizedBox(
+                              height: 40,
+                              child: Text(
+                                "Main Ingredient",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
 
                             buildPrefBtn(),
                             //buildPreferCheckBox(),
@@ -762,5 +781,3 @@ class _ChooseMealState extends State<ChooseMeal> {
     );
   }
 }
-
-class Firestore {}
