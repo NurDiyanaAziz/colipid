@@ -79,81 +79,64 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 4,
         shadowColor: Colors.black,
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: Color.fromARGB(255, 109, 155, 161),
         child: SizedBox(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 //SizedBox
-                Text(
-                  e.date.toString(),
-
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ), //Textstyle
-                ), //Text
-
-                Text(
-                  '',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ), //Textstyle
-                ), //Text
-                //SizedBox
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          child: Text(
-                            'Plan Name: ' + e.plan,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ), //Textstyle
-                          ),
-                        ),
-                        Text(
-                          'Calories: ' + e.plantype,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ), //Textstyle
-                        ),
-                        Text(
-                          'Time Added: ' + e.time.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ), //Textstyle
-                        ),
-                      ],
+                Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        e.date.toString(),
+                        style: TextStyle(
+                            fontSize: 19, fontWeight: FontWeight.w400),
+                      ),
                     ),
-                    SizedBox(
-                      height: 30,
+
+                    SizedBox(height: 5,),
+                    
+              SizedBox(height: 10,),
+              Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Plan Name: ' + e.plan,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
                     ),
-                  ],
-                ),
+                     SizedBox(height: 10,),
+              Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Calories: ' + e.plantype,
+                        style: TextStyle(
+                            fontSize:18, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                     SizedBox(height: 10,),
+              Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Time Added: ' + e.time.toString(),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+
                 SizedBox(
                   height: 30,
                 ),
-                SizedBox(
-                  height: 30,
-                  child: ElevatedButton(
+                 Align(
+                      alignment: Alignment.topRight,
+                      child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           Color.fromARGB(255, 86, 133, 104)),
                     ),
                     onPressed: () async {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
                               MenuDetailReport(plan: e.plan)));
                     },
@@ -165,7 +148,8 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
+                    ),
+                
 
                 //SizedBox
               ],
@@ -234,17 +218,7 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
+             
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding:
@@ -253,17 +227,15 @@ class _userViewMealTakenState extends State<userViewMealTaken> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     const SizedBox(height: 20),
-                    buildBackBtn(),
-                    const SizedBox(
-                      height: 50,
+                  const Align(
+                      alignment: Alignment.topLeft,
                       child: Text(
-                        'Meal Taken Report',
+                        'Meal Taken Today',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
+                            fontSize: 23, fontWeight: FontWeight.w400),
                       ),
                     ),
+                    
                     SizedBox(
                       height: 570,
                       child: StreamBuilder<List<MealTakenModel>>(

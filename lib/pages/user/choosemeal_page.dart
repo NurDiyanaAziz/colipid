@@ -292,7 +292,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                                 String plantype =
                                     snap.docs[0]['plantype'].toString();
                                 Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
+                                    .push(MaterialPageRoute(
                                         builder: (context) => MenuDetail(
                                               plan: name,
                                               plantype: plantype,
@@ -502,21 +502,13 @@ class _ChooseMealState extends State<ChooseMeal> {
         trailing: IconButton(
             icon: Icon(Icons.folder),
             onPressed: () {
-              openDialogs(e);
+              Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MenuDetail(
+                                plan: e.plan, plantype: e.plantype)));
             }),
       ));
 
-  Widget buildMeal(MealModel e) => Card(
-      elevation: 5,
-      child: ListTile(
-        title: Text(e.plan),
-        subtitle: Text(e.tag),
-        trailing: IconButton(
-            icon: Icon(Icons.folder),
-            onPressed: () {
-              openDialogs(e);
-            }),
-      ));
+
   Future patientLike() => showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -607,7 +599,7 @@ class _ChooseMealState extends State<ChooseMeal> {
         );
       });
 
-  Future openDialogs(MealModel e) => showDialog(
+  /*Future openDialogs(MealModel e) => showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
@@ -648,7 +640,7 @@ class _ChooseMealState extends State<ChooseMeal> {
           ),
         );
       });
-
+*/
   @override
   Widget build(BuildContext context) {
     int index = 1;
@@ -746,11 +738,7 @@ class _ChooseMealState extends State<ChooseMeal> {
                       ),
                     ),
                     Container(
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                        child: Column(
+                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             buildPref(),
@@ -770,7 +758,7 @@ class _ChooseMealState extends State<ChooseMeal> {
 
                             buildUserPreference(),
                           ],
-                        ),
+                        
                       ),
                     )
                   ]),

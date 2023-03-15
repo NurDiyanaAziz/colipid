@@ -33,12 +33,39 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[
-      Icon(Icons.file_copy, size: 30, color: index == 0? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
-      Icon(Icons.home, size: 30, color: index == 1? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
-      Icon(Icons.logout, size: 30, color: index == 2? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 104, 104, 104),),
+      Icon(Icons.file_copy, size: 30, color: index == 0? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 168, 168, 168),),
+      Icon(Icons.home, size: 30, color: index == 1? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 168, 168, 168),),
+      Icon(Icons.logout, size: 30, color: index == 2? Color.fromRGBO(255, 255, 255, 1) : Color.fromARGB(255, 168, 168, 168),),
     ];
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Do you want to go exit?'),
+              actionsAlignment: MainAxisAlignment.spaceBetween,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('No'),
+                ),
+              ],
+            );
+          },
+        );
+        return shouldPop!;
+      },
+      child: Scaffold(
       body: screens[index],
       bottomNavigationBar: CurvedNavigationBar(
         
@@ -51,6 +78,6 @@ class _UserMainScreenState extends State<UserMainScreen> {
         animationDuration: Duration(milliseconds: 300),
         onTap: (index) => setState(() => this.index = index),
       ),
-    );
+    ));
   }
 }

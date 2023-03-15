@@ -121,7 +121,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
               child: Text(
                 'Back',
                 style: TextStyle(
-                    color: Colors.blue[400],
+                    color: Color.fromARGB(255, 255, 255, 255),
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -183,6 +183,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                 ]),
             height: 60,
             child: TextField(
+              enabled: false,
               controller: name,
               keyboardType: TextInputType.name,
               style: TextStyle(color: Colors.black87, fontSize: 20),
@@ -289,6 +290,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
                   ]),
               height: 60,
               child: TextField(
+                 enabled: false,
                 controller: age,
                 keyboardType: TextInputType.name,
                 style: TextStyle(color: Colors.black87),
@@ -338,13 +340,13 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
 
             bmiss = weights / (heights * heights);
             if (bmiss < 18.5) {
-              bmistat = "underweight";
+              bmistat = "Underweight";
             } else if (bmiss >= 18.5 && bmiss <= 24.9) {
-              bmistat = "healthy weight";
+              bmistat = "Healthy weight";
             } else if (bmiss >= 25.0 && bmiss <= 29.9) {
-              bmistat = "overweight";
+              bmistat = "Overweight";
             } else if (bmiss >= 30) {
-              bmistat = "obese";
+              bmistat = "Obese";
             }
 
             double whratio = waists / hips;
@@ -409,7 +411,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
         child: Text(
           'Submit',
           style: TextStyle(
-              color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Color.fromARGB(255, 255, 255, 255), fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -761,7 +763,34 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
       Icon(Icons.person, size: 30),
     ];
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Confirm Discard? Are you sure?'),
+              actionsAlignment: MainAxisAlignment.spaceBetween,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('No'),
+                ),
+              ],
+            );
+          },
+        );
+        return shouldPop!;
+      },
+      child:  Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: Stack(
@@ -769,39 +798,33 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
+              
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 70),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 50),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Information',
+                   
+                     Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                      'Update information',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(height: 5),
-                    buildBack(),
-                    SizedBox(height: 30),
+                                ),
+                    
+                    SizedBox(height: 35),
+                
                     buildName(),
                     buildAge(),
                     buildWeightHeight(),
                     buildWaistHipLabel(),
                     buildWaistHip(),
-                    SizedBox(height: 15),
+                    
                     buildActiveType(),
                     SizedBox(height: 15),
                     buildSubmitBtn()
@@ -812,7 +835,7 @@ class _UserUpdateInfoState extends State<UserUpdateInfo> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

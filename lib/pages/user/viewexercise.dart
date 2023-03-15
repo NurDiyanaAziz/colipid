@@ -76,87 +76,70 @@ class _userViewExerciseState extends State<userViewExercise> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 4,
         shadowColor: Colors.black,
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: Color.fromARGB(255, 121, 163, 167),
         child: SizedBox(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                //SizedBox
-                Text(
-                  e.date.toString(),
+                Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        e.date.toString(),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 23,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    
 
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ), //Textstyle
-                ), //Text
+                
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  '',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ), //Textstyle
-                ), //Text
-                //SizedBox
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          child: Text(
-                            'Exercise Name: \n' + e.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ), //Textstyle
-                          ),
-                        ),
-                        Text(
-                          'Time Added: ' + e.time.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
+                 Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Exercise Name: ' + e.name,
+                        style: TextStyle(
                             color: Colors.black,
-                          ), //Textstyle
-                        ),
-                        Text(
-                          'Calories Burned: ' + e.cal.toString() + ' cal',
-                          style: TextStyle(
                             fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                        Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                         'Time Added: ' + e.time.toString(),
+                        style: TextStyle(
                             color: Colors.black,
-                          ), //Textstyle
-                        ),
-                      ],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
-                    SizedBox(
-                      width: 30,
+                     Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                         'Calories Burned: ' + e.cal.toString() + ' cal',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
-                  ],
-                ),
+                     Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Duration of Exercise: ' + e.durations.toString() + ' min',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
 
-                SizedBox(
-                  height: 30,
-                ),
-                SizedBox(
-                  child: Text(
-                    'Duration of Exercise: ' + e.durations.toString() + ' min',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 29, 9, 83),
-                    ), //Textstyle
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
+           
                 //SizedBox
               ],
             ), //Column
@@ -368,17 +351,7 @@ class _userViewExerciseState extends State<userViewExercise> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
+              padding: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding:
@@ -386,30 +359,30 @@ class _userViewExerciseState extends State<userViewExercise> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    const SizedBox(height: 20),
-                    buildBackBtn(),
-                    const SizedBox(
-                      height: 50,
+                    
+                      const Align(
+                      alignment: Alignment.topLeft,
                       child: Text(
                         'Exercise Report',
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 25,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
-                    SizedBox(
-                      height: 50,
-                      child: Text(
+                   Align(
+                      alignment: Alignment.topLeft,
+                      child:Text(
                         'Total calories burned: ' + total + ' cal',
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
+                    
                     SizedBox(
-                      height: 500,
+                      height: MediaQuery.of(context).size.height-80,
                       child: StreamBuilder<List<ExerciseTakenModel>>(
                           stream: readExerciseReport(),
                           builder: (context, snapshot) {

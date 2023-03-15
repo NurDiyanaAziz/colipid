@@ -85,11 +85,13 @@ class _MenuDetailReportState extends State<MenuDetailReport> {
   late SharedPreferences logindata;
   late String plannames = "";
 
-  Widget buildBackSubmmimtBtn() {
+
+Widget buildBackChooseBtn() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Flexible(
+          flex: 1,
             child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
@@ -98,10 +100,10 @@ class _MenuDetailReportState extends State<MenuDetailReport> {
             width: 100,
             child: ElevatedButton(
               onPressed: () async {
-                final index = 1;
+                final index = 0;
+                 Navigator.pop(context);
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => userViewMealTaken(myObject: index)));
+              
               },
               child: Text(
                 'Back',
@@ -113,9 +115,12 @@ class _MenuDetailReportState extends State<MenuDetailReport> {
             ),
           ),
         )),
+       
       ],
     );
   }
+
+
 
   Widget buildViewMeal() {
     return Container(child: Text(''));
@@ -132,26 +137,16 @@ class _MenuDetailReportState extends State<MenuDetailReport> {
     ];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.white, Colors.white],
-              )),
-              child: SingleChildScrollView(
+        child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: 800,
+                      height: MediaQuery.of(context).size.height-80,
                       child: PageView(
                         controller: page,
                         scrollDirection: Axis.horizontal,
@@ -264,13 +259,12 @@ class _MenuDetailReportState extends State<MenuDetailReport> {
 
                     // buildViewMeal(),
 
-                    buildBackSubmmimtBtn(),
+                    buildBackChooseBtn(),
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+
+             
       ),
     );
   }

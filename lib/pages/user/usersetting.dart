@@ -35,9 +35,10 @@ class _UserSettingState extends State<UserSetting> {
   Widget buttonLogout() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width/2,
       child: ElevatedButton(
         style: ButtonStyle(
+          
           backgroundColor: MaterialStateProperty.all(Colors.red),
         ),
         onPressed: () async {
@@ -52,7 +53,34 @@ class _UserSettingState extends State<UserSetting> {
         child: Text(
           'LOGOUT',
           style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 18,fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
+ Widget buttonUpdatePhoneNumber() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          
+          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 62, 151, 169)),
+        ),
+        onPressed: () async {
+          final action = await Dialogs.yesAbortDialog(
+              context, 'Confirm Logout?', 'Are you sure?');
+          if (action == DialogAction.yes) {
+            logindata.setBool('login', true);
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => LoginPageScreen()));
+          }
+        },
+        child: Text(
+          'Update Phone Number',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20,fontWeight: FontWeight.w400),
         ),
       ),
     );
@@ -69,6 +97,19 @@ class _UserSettingState extends State<UserSetting> {
     ];
 
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+                                      'images/ic_launcher.png',
+                                      scale: 4,
+                                      
+                                    ),
+          ),
+          backgroundColor: Color.fromARGB(0, 46, 41, 41),
+          elevation: 0,
+        ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: Stack(
@@ -76,34 +117,28 @@ class _UserSettingState extends State<UserSetting> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x663e97a9),
-                  Color(0x993e97a9),
-                  Color(0xcc3e97a9),
-                  Color(0xff3e97a9),
-                ],
-              )),
+             
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 70),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                   const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Settings',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w400),
+                      ),
                     ),
                     SizedBox(height: 20),
-                    buttonLogout(),
+                     buttonUpdatePhoneNumber(),
                     SizedBox(height: 5),
+                    buttonLogout(),
+                   
                     SizedBox(height: 40),
+
                     SizedBox(height: 20),
                     SizedBox(height: 20),
                   ],

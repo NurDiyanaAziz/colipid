@@ -212,12 +212,11 @@ class _UserHealthMenuScreenState extends State<UserHealthMenuScreen> {
           automaticallyImplyLeading: false,
           title: Align(
             alignment: Alignment.center,
-            child: Text(
-                        'MyLipid',
-                        style: TextStyle(
-                          color: Colors.black,
-                            fontSize: 25, fontWeight: FontWeight.w500),
-                      ),
+            child: Image.asset(
+                                      'images/ic_launcher.png',
+                                      scale: 4,
+                                      
+                                    ),
           ),
           backgroundColor: Color.fromARGB(0, 46, 41, 41),
           elevation: 0,

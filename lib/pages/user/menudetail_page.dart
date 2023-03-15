@@ -103,9 +103,9 @@ class _MenuDetailState extends State<MenuDetail> {
             child: ElevatedButton(
               onPressed: () async {
                 final index = 0;
+                 Navigator.pop(context,true);
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ChooseMeal(myObject: plantypes)));
+              
               },
               child: Text(
                 'Back',
@@ -257,7 +257,7 @@ class _MenuDetailState extends State<MenuDetail> {
                                       fit: BoxFit.cover)),
                               child: Container(
                                   margin: const EdgeInsets.only(
-                                      top: 150, left: 20, right: 20),
+                                      top: 150, left: 10, right: 10),
                                   child: Row(children: [
                                     Column(
                                       crossAxisAlignment:

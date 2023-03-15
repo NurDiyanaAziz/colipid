@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colipid/pages/user/chooseexercise.dart';
 import 'package:colipid/pages/user/viewexercise.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import '../admin/dialogs.dart';
 import 'choosemeal_page.dart';
@@ -25,6 +28,7 @@ class _UserHomePageState extends State<UserHomePage> {
   late String height;
   late String bmi;
   late String bmistat;
+  late String whratiostat;
 
   late SharedPreferences logindata;
   late String ic;
@@ -37,10 +41,15 @@ class _UserHomePageState extends State<UserHomePage> {
     height = '';
     bmi = '';
     bmistat = '';
+    whratiostat='';
     initial();
   }
 
   late String total = "";
+  late String totalDur="";
+  late String percents="";
+  late double percentss=0.0;
+  late String perc=""; //percent inside circle
   void initial() async {
     logindata = await SharedPreferences.getInstance();
 
@@ -60,13 +69,45 @@ class _UserHomePageState extends State<UserHomePage> {
         .where("date", isEqualTo: actualDate)
         .get();
 
-    double weights = 0;
+    double cal = 0;
+    double dur=0;
     int size = snaps.size;
     String temp = '';
+    String tempDur='0.0';
+    double tempCalcPercent=0.0;
+    double tempCalcPer=0.0;
+    double percents1 =0.0;
+    String calPer='';
+    double tempdurr=0.0;
     for (int i = 0; i < size; i++) {
-      weights += snaps.docs[i]['cal'];
-      temp = weights.toStringAsFixed(2);
+      cal += snaps.docs[i]['cal'];
+      temp = cal.toStringAsFixed(2);
+      dur += snaps.docs[i]['duration'];
+      tempDur = dur.toStringAsFixed(0);
     }
+
+tempdurr=double.parse(tempDur);
+     //check if user done their min 30 min exercise
+    if(tempdurr <45.0){
+      tempCalcPercent = double.parse(tempDur)/60;
+      percents1 = double.parse(tempCalcPercent.toStringAsFixed(1));
+      
+      
+      tempCalcPer = tempCalcPercent*100;
+      calPer=tempCalcPer.toStringAsFixed(1);
+      
+
+    }else if(tempdurr>=45.0){
+      percents1 = 1.0;
+      calPer = '100.0';
+    }
+
+
+    //suggest food set based on bmi value
+    
+   
+
+    
 
     setState(() {
       ic = logindata.getString('ic').toString();
@@ -76,18 +117,19 @@ class _UserHomePageState extends State<UserHomePage> {
       bmi = bmi1.toString();
       bmistat = snap.docs[0]['bmistatus'].toString();
       total = temp;
+      totalDur = tempDur;
+      percents = percents1.toStringAsFixed(1);
+      percentss = double.parse(percents);
+      perc=calPer;
+      whratiostat = snap.docs[0]['ratiostat'].toString();
+     
+      
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final items = <Widget>[
-      Icon(Icons.file_open, size: 30),
-      Icon(Icons.search, size: 30),
-      Icon(Icons.home, size: 30),
-      Icon(Icons.settings, size: 30),
-      Icon(Icons.person, size: 30),
-    ];
+   
     Future openDialogMenu() => showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -217,6 +259,7 @@ class _UserHomePageState extends State<UserHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     const Text(
                       'Exercise',
                       textAlign: TextAlign.center,
@@ -271,103 +314,330 @@ class _UserHomePageState extends State<UserHomePage> {
           );
         });
 
-    return Scaffold(
+    return  Scaffold(
+       appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+                                      'images/ic_launcher.png',
+                                      scale: 4,
+                                      
+                                    ),
+          ),
+          backgroundColor: Color.fromARGB(0, 46, 41, 41),
+          elevation: 0,
+        ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: Stack(
           children: <Widget>[
             Container(
-              height: double.infinity,
-              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
              
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      height: 200,
-                      width: 400,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(50),
-                            bottomLeft: Radius.circular(50)),
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Stack(children: [
-                        Positioned(
-                            top: 10,
-                            left: 10,
-                            right: 10,
-                            child: Container(
-                              height: 180,
-                              width: 300,
-                              decoration: const BoxDecoration(
-                                  color: Color.fromARGB(163, 47, 132, 150),
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    bottomLeft: Radius.circular(40),
-                                  )),
-                            )),
-                        Positioned(
-                            top: 20,
-                            left: 30,
-                            child: Text(
-                              "Profile\n\n" +
-                                  "Name:         " +
-                                  name +
-                                  "\nWeight:       " +
-                                  weight +
-                                  " kg" +
-                                  "\nHeight:        " +
-                                  height +
-                                  " m" +
-                                  "\nBMI:             " +
-                                  bmi +
-                                  "\nBMI status: " +
-                                  bmistat,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ]),
+                    
+                  
+                  SizedBox(
+                      height: 30,
+                      child: Align(
+                                  alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Hi ' + name + ',',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                  )
+     
                     ),
-                    const SizedBox(height: 30),
-                    Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: const Text('Meal'),
-                          trailing: IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                openDialogMenu();
-                              }),
-                        )),
-                    const SizedBox(height: 15),
-                    Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Text(
-                            'Exercise',
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Welcome',
+                        style: TextStyle(
+                            fontSize: 19, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 135, 148, 151),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            height: 270,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Profile',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Weight(kg): '+weight,
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                 Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Height(m): '+height,
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                 Align(
+                                  alignment: Alignment.topLeft,
+                                  child:Text(
+                                    'BMI: '+bmi,
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                 Align(
+                                  alignment: Alignment.topLeft,
+                                  child:Text(
+                                    'Status: '+bmistat,
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child:Text(
+                                    'Waist & Hip stat: '+whratiostat,
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                InkWell(
+                          child:  Align(
+                                  alignment: Alignment.topRight,
+                                  child:Text(
+                                    '',
+                                    style: TextStyle(
+                                      letterSpacing: 1.5,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white),
+                                  ),
+                                ),onTap: () {
+                            //
+                          },
+                        ),
+                                
+                               
+                                
+                                
+                              ],
+                            ),
                           ),
-                          subtitle: Text(
-                            'Total calories burned: ' + total,
-                            style: const TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold),
+                          onTap: () {
+                            //
+                          },
+                        ),
+
+                    SizedBox(height: 20),
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFA1ADE9),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            height: 250,
+                            width: 170,
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Meal',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Stack(
+                                  children: [
+                                   
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child:
+                                         Image.asset(
+                                      'images/food.png',
+                                      
+                                    ),
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text(
+                                    'Set meals to choose',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          trailing: IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                openDialogExercise();
-                              }),
-                        )),
-                    const SizedBox(height: 40),
-                    const SizedBox(height: 20),
+                          onTap: () {
+                             openDialogMenu();
+                          },
+                        ),
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFB8B8B),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            height: 250,
+                            width: 170,
+                            child: Column(
+                              children: [
+                               Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Exercise ',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                               SizedBox(
+                                  height: 20,
+                                ),
+                                Stack(
+                                  alignment: AlignmentDirectional.topCenter,
+                                  children: [
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child: Image.asset(
+                                          'images/circle.png',scale: 0.8,),
+                                    ),
+                                    CircularPercentIndicator(
+                                        startAngle: 0.4,
+                radius: 60.0,
+                lineWidth: 13.0,
+                animation: true,
+                percent:percentss,
+                center:  Text(
+                  perc+"%",
+                  style:
+                       TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
+                
+                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: Colors.purple,
+              ),
+                                    
+                                    
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                               Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Total calories: ' + total + ' cal',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                 Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Duration: ' + totalDur + ' min',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            openDialogExercise();
+                          },
+                        ),
+                      ],
+                    ),
+                     
+                       
+                      
+                    
+                   
+                 
                     const SizedBox(height: 20),
                   ],
                 ),
