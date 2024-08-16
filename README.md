@@ -1,6 +1,6 @@
 # colipid
 
-A new Flutter project.
+//PROJECT IS DEPRECATED DUE FLUTTER AND FIREBASE
 
 ## Getting Started
 
